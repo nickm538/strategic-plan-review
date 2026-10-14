@@ -1,0 +1,589 @@
+# PIT Radar — lexicon
+#
+# Used by:
+#   prefilter          docs/04 §5   (signal terms, Long Island anchor, exclusions, score)
+#   query planner      docs/04 §6   (query_templates)
+#   verifier V2 / V6   docs/05 §5   (privacy_denylist, privacy_patterns)
+#   notes check        docs/07 §3   (same denylist as V6)
+#
+# Matching rules (apply everywhere unless an entry says otherwise):
+#   - Text is normalized first: Unicode NFKC, curly quotes -> straight, dashes unified, whitespace collapsed.
+#   - Plain entries match case-insensitively on word boundaries. A multi-word entry matches any run of
+#     whitespace between its words.
+#   - Entries starting with "re:" are Python regular expressions, compiled with IGNORECASE. A scoped
+#     inline flag such as (?-i:...) turns case sensitivity back on for part of a pattern.
+#
+# Status: a STARTING vocabulary written from domain knowledge. It has NOT been tuned on collected data.
+# Tune it during the shadow pilot (docs/11 Phase 10): add terms from real misses, and move terms that
+# produce noise to soft_exclusions. Admin edits from the UI are stored as overrides in the `settings`
+# table (key `lexicon.overrides`) and logged to audit_log. This file stays the default.
+
+version: 1
+
+# ---------------------------------------------------------------------------
+# 1. Signal terms (prefilter rule 1: an item must match at least one term from these five lists)
+# ---------------------------------------------------------------------------
+
+encampment_terms:
+  - encampment
+  - encampments
+  - homeless camp
+  - homeless camps
+  - homeless encampment
+  - tent city
+  - tent encampment
+  - living in tents
+  - living in a tent
+  - sleeping in tents
+  - living in the woods
+  - camp in the woods
+  - camping in the woods        # also recreational; the classifier decides
+  - makeshift shelter
+  - makeshift shelters
+  - makeshift camp
+  - shanty
+  - shanties
+  - 're:\b(living|sleeping|staying|camped|camping)\s+(under|beneath)\s+(the\s+)?(bridge|overpass|underpass|trestle)\b'
+  - 're:\bsquatting\s+in\s+(an?\s+|the\s+)?(abandoned|empty|vacant)\b'
+  - 're:\btents?\s+(behind|under|beneath|near|by|next\s+to|in\s+the\s+woods|in\s+the\s+park)\b'
+  - 're:\btarps?\s+(and|with)\s+(belongings|shopping\s+carts?|mattress(es)?|blankets)\b'
+
+individual_sighting_terms:
+  - homeless                    # the bare word; most posts use it. Opinion and policy posts also match, and
+                                # soft_exclusions plus the classifier handle them
+  - unhoused
+  - unsheltered
+  - houseless
+  - vagrant                     # pejorative, but people use it in posts
+  - vagrants
+  - sleeping rough
+  - sleeping outside
+  - sleeping outdoors
+  - living outside
+  - 're:\bsleeping\s+(on|in|at|under)\s+(the\s+|a\s+)?(bench|benches|platform|station|bus\s+shelter|bus\s+stop|doorway|park|beach|sidewalk|street|steps|stairs|boardwalk|parking\s+(lot|garage))\b'
+  - 're:\bliving\s+(on|in|at)\s+(the\s+)?(street|streets|park|station|beach|boardwalk|parking\s+(lot|garage))\b'
+  - 're:\b(people|someone|somebody|a\s+person|a\s+guy|a\s+man|a\s+woman)\s+(has\s+been\s+|have\s+been\s+|is\s+|are\s+)?(sleeping|living|staying)\s+(at|in|on|behind|under)\s+the\b'
+
+vehicle_dwelling_terms:
+  - 're:\b(living|sleeping|lives|sleeps|staying|stays)\s+(in|out\s+of)\s+(my|his|her|their|our|a|an|the)\s+(car|cars|van|minivan|suv|truck|rv|camper|vehicle)\b'
+  - 're:\b(car|van|rv|camper)\s+(he|she|they)\s+(lives?|sleeps?)\s+in\b'
+
+self_report_terms:
+  - "re:\\bi\\s*(am|'m)\\s+(currently\\s+|now\\s+)?homeless\\b"
+  - "re:\\bwe\\s*(are|'re)\\s+(currently\\s+|now\\s+)?homeless\\b"
+  - "re:\\b(i|we)\\s*(am|'m|are|'re)\\s+about\\s+to\\s+be\\s+(homeless|on\\s+the\\s+street)\\b"
+  - 're:\b(i|we)\s+have\s+nowhere\s+to\s+(go|sleep|stay)\b'
+  - 're:\b(i|we)\s*(am|are|have\s+been)?\s*(sleeping|living)\s+in\s+(my|our)\s+(car|van|truck)\b'
+  - 're:\bneed\s+(a\s+)?(place|somewhere)\s+to\s+(sleep|stay)\s+tonight\b'
+
+spanish_terms:
+  - sin hogar
+  - persona sin hogar
+  - personas sin hogar
+  - indigente
+  - indigentes
+  - vagabundo                   # pejorative, but common
+  - vagabundos
+  - desamparado
+  - desamparados
+  - en situación de calle
+  - 're:\b(durmiendo|viviendo|duermen|viven|duerme|vive)\s+en\s+(la\s+calle|el\s+parque|la\s+estación|el\s+bosque)\b'
+  - 're:\b(durmiendo|viviendo|duermen|viven|duerme|vive|duermo|vivo)\s+en\s+(el|su|mi|un)\s+(carro|auto|coche|camioneta|van)\b'
+  - 're:\bcampamento\s+de\s+(personas\s+sin\s+hogar|indigentes)\b'
+  - 're:\bno\s+tengo\s+(donde|dónde|a\s+donde|a\s+dónde)\s+(dormir|quedarme|vivir|ir)\b'
+  - 're:\bestoy\s+sin\s+hogar\b'
+
+# ---------------------------------------------------------------------------
+# 2. Long Island anchor (prefilter rule 2)
+#    An item passes rule 2 if ANY of these holds:
+#      a) a gazetteer place name or alias (data/li_places.json) appears in the text
+#      b) the item comes from an LI-scoped source (config/sources.yaml: source_scope = li_scoped)
+#      c) the query had a place (context.query_place_id) and that place name appears in the text
+#      d) one of region_anchor_terms appears in the text
+#    Bare "Nassau" and "Suffolk" also name places elsewhere (Nassau, Bahamas; Suffolk, VA; Suffolk, England).
+#    That is acceptable for a prefilter gate: the classifier and the geofence make the real decision.
+# ---------------------------------------------------------------------------
+
+region_anchor_terms:
+  - Long Island
+  - Nassau
+  - Nassau County
+  - Suffolk
+  - Suffolk County
+  - LIRR
+  - Long Island Rail Road
+  - Long Island Railroad
+  - NICE bus                    # Nassau Inter-County Express
+  - Suffolk Transit
+  - Strong Island
+  - 're:(?-i:\bLI\b)'           # uppercase "LI" only, so "li" inside other text never matches
+
+# Place-type words count as "place terms" for the proximity bonus in the score (docs/04 §5).
+# They never satisfy rule 2 on their own.
+place_type_terms:
+  - station
+  - train station
+  - platform
+  - bus shelter
+  - bus stop
+  - transit center
+  - park and ride
+  - parking lot
+  - parking garage
+  - park
+  - woods
+  - wooded area
+  - beach
+  - boardwalk
+  - pier
+  - marina
+  - dock
+  - overpass
+  - underpass
+  - bridge
+  - trestle
+  - sump                        # Long Island usage for a fenced recharge basin
+  - recharge basin
+  - library
+  - plaza
+  - strip mall
+  - shopping center
+  - mall
+  - laundromat
+  - rest stop
+  - hospital
+  - emergency room
+  - church
+  - abandoned building
+  - abandoned house
+  - vacant lot
+  - Pine Barrens
+
+# ---------------------------------------------------------------------------
+# 3. Recency terms (score bonus +0.2; docs/04 §5)
+# ---------------------------------------------------------------------------
+
+recency_terms:
+  - tonight
+  - last night
+  - this morning
+  - this afternoon
+  - this evening
+  - today
+  - right now
+  - just now
+  - this week
+  - all week
+  - every night
+  - every morning
+  - still there
+  - lately
+  - these days
+  - 're:\bfor\s+(days|weeks|months)\b'
+  - 're:\b(past|last)\s+(few|couple(\s+of)?)\s+(days|nights|weeks)\b'
+  # Spanish
+  - esta noche
+  - anoche
+  - esta mañana
+  - ahora mismo
+  - hoy
+  - todas las noches
+  - todavía
+  - 're:\bdesde\s+hace\s+(días|semanas|meses)\b'
+
+# ---------------------------------------------------------------------------
+# 4. Exclusions
+# ---------------------------------------------------------------------------
+
+hard_exclusions:
+  # Always excluded (prefilter rule 3).
+  animal:
+    - 're:\bhomeless\s+(dog|dogs|cat|cats|kitten|kittens|kitty|puppy|puppies|pup|pups|pet|pets|animal|animals|bunny|rabbit)\b'
+    - 're:\b(perro|perros|gato|gatos|perrito|gatito)s?\s+(sin\s+hogar|callejeros?)\b'
+
+  # Excluded only when NO Nassau/Suffolk place (gazetteer) and NO region anchor term appears.
+  # ("Long Island City" itself contains "Long Island"; that occurrence does not count as an anchor.) Queens and Brooklyn are on the island but are not in scope (docs/06 §1).
+  nyc_only_locations:
+    - Long Island City
+    - 're:(?-i:\bLIC\b)'
+    - Queens
+    - Brooklyn
+    - Manhattan
+    - Bronx
+    - Staten Island
+    - NYC
+    - New York City
+    - Jamaica station
+    - Jamaica Avenue
+    - 're:\bJamaica,?\s+(Queens|NY)\b'
+    - Flushing
+    - Far Rockaway
+    - Rockaway Beach
+    - Rockaway Park
+    - the Rockaways
+    - Penn Station
+    - Grand Central Madison
+    - Atlantic Terminal
+    - Woodside
+    - Forest Hills
+    - Kew Gardens
+    - Bayside
+    - Little Neck
+    - Rosedale
+    - Laurelton
+    - Hollis
+    - Queens Village
+
+  # Same names as Long Island places, elsewhere (docs/06 §5). Excluded only when no region anchor term
+  # is present; otherwise the classifier decides. Two-letter state codes are case-sensitive so that
+  # "Huntington in the woods" or "Medford or Patchogue" never match.
+  out_of_area_hints:
+    - 're:\bHuntington,?\s+((?-i:WV|IN)|W\.?\s?Va\.?|West\s+Virginia|Indiana)\b'
+    - Huntington Beach
+    - 're:\bLevittown,?\s+((?-i:PA)|Pa\.|Pennsylvania)\b'
+    - Bucks County
+    - 're:\bFreeport,?\s+((?-i:ME|IL|TX|FL)|Maine|Illinois|Texas|Florida|Bahamas)\b'
+    - Grand Bahama
+    - 're:\bLong\s+Beach,?\s+((?-i:CA)|Calif\.?|California)\b'
+    - 're:\bBrentwood,?\s+((?-i:CA|TN)|Calif\.?|California|Tenn\.?|Tennessee|Essex)\b'
+    - 're:\bMedford,?\s+((?-i:MA|OR|NJ)|Mass\.?|Massachusetts|Ore\.?|Oregon)\b'
+    - 're:\bSouthampton,?\s+((?-i:UK|PA)|England|Hampshire)\b'
+    - 're:\bHicksville,?\s+((?-i:OH)|Ohio)\b'
+    - 're:\bIslip,?\s+((?-i:UK)|England|Oxfordshire)\b'
+    - 're:\bWestbury,?\s+((?-i:UK)|England|Wiltshire)\b'
+    - 're:\bSuffolk,?\s+((?-i:VA|UK)|Va\.|Virginia|England)\b'
+    - 're:\bNassau,?\s+((?-i:NH|DE)|Bahamas)\b'
+
+  # Border places: NOT excluded. Listed so tests cover them and reviewers know to check the county.
+  # Parts of these names are in Queens and parts in Nassau; the geofence decides (docs/06).
+  border_ambiguous_note:
+    - Floral Park
+    - Bellerose
+    - New Hyde Park
+    - Glen Oaks
+
+soft_exclusions:
+  # Each match lowers the prefilter score by 0.2 (once per item). The item still goes to the classifier
+  # if budget allows, because news about an encampment at a named place IS a signal.
+  - fundraiser
+  - fundraising
+  - donate
+  - donation
+  - donations
+  - gala
+  - raffle
+  - food drive
+  - coat drive
+  - toy drive
+  - sock drive
+  - volunteer
+  - volunteers
+  - volunteering
+  - awareness month
+  - awareness week
+  - Hunger and Homelessness Awareness Week
+  - statistics
+  - report finds
+  - survey
+  - point-in-time count
+  - PIT count
+  - legislation
+  - legislature
+  - legislator
+  - ordinance
+  - county executive
+  - budget
+  - grant
+  - funding
+  - shelter beds
+  - press release
+  - ribbon cutting
+  - Code Blue                   # cold-weather shelter announcements; mostly not sightings
+  - affordable housing
+  - housing crisis
+
+# ---------------------------------------------------------------------------
+# 5. Privacy (privacy rule R3/R4; verifier V2 for quotes, V6 for summaries; notes check)
+#
+#    mask: gendered words. In a STORED quote they are replaced with the bracketed neutral word below,
+#          and the quote is marked masked=true. V1 has already checked the ORIGINAL quote against the post.
+#    drop: any match removes the quote and sets evidence_redacted=true.
+#    For neutral_summary and decision_basis (V6) and for staff notes, a match from EITHER tier fails the
+#    check (summary -> template; note -> rejected with a friendly message).
+#
+#    Names cannot be listed. The classifier is instructed never to quote them (prompt rule 3), and
+#    reviewers dismiss or redact any that slip through.
+#    Colour words are in the drop tier on purpose: they describe people or the vehicle someone lives in.
+# ---------------------------------------------------------------------------
+
+privacy_denylist:
+  mask:
+    "[person]":
+      - man
+      - woman
+      - guy
+      - gal
+      - lady
+      - gentleman
+      - dude
+      - male
+      - female
+      - mom
+      - mother
+      - dad
+      - father
+      - wife
+      - husband
+      - girlfriend
+      - boyfriend
+      - son
+      - daughter
+      - brother
+      - sister
+      - hombre
+      - mujer
+      - señor
+      - señora
+    "[people]":
+      - men
+      - women
+      - guys
+      - ladies
+      - gentlemen
+      - dudes
+      - males
+      - females
+    "[they]":
+      - he
+      - she
+    "[them]":
+      - him
+    "[their]":
+      - his
+      - her
+      - hers
+    "[themself]":
+      - himself
+      - herself
+
+  drop:
+    age:
+      - 're:\b\d{1,3}\s*(-|\s)?\s*(yo|y/o|yrs?\s+old|years?\s+old|year-old|years-old)\b'
+      - 're:\b(old|older|elderly|young|younger|middle-aged)\s+(man|woman|guy|lady|person|people|couple|men|women|gentleman)\b'
+      - elderly
+      - senior citizen
+      - teen
+      - teens
+      - teenager
+      - teenagers
+      - teenage
+      - kid
+      - kids
+      - child
+      - children
+      - minor
+      - minors
+      - baby
+      - babies
+      - toddler
+      - infant
+      - boy
+      - boys
+      - girl
+      - girls
+      - niño
+      - niños
+      - niña
+      - niñas
+      - anciano
+      - anciana
+      - joven
+    race_ethnicity_nationality:
+      - black
+      - white
+      - brown
+      - hispanic
+      - latino
+      - latina
+      - latinx
+      - asian
+      - caucasian
+      - african american
+      - arab
+      - middle eastern
+      - mexican
+      - guatemalan
+      - salvadoran
+      - honduran
+      - dominican
+      - puerto rican
+      - haitian
+      - indian
+    immigration_status:
+      - immigrant
+      - immigrants
+      - migrant
+      - migrants
+      - illegal
+      - illegals
+      - undocumented
+      - 're:(?-i:\bICE\b)'        # uppercase only, so "ice on the platform" never matches
+      - deported
+    gender_identity:
+      - trans
+      - transgender
+      - nonbinary
+      - non-binary
+    appearance_and_clothing:
+      - wearing
+      - dressed
+      - beard
+      - bearded
+      - bald
+      - tattoo
+      - tattoos
+      - tattooed
+      - skinny
+      - heavyset
+      - overweight
+      - obese
+      - fat
+      - blond
+      - blonde
+      - redhead
+      - gray-haired
+      - grey-haired
+      - dreadlocks
+      - dreads
+      - toothless
+      - missing teeth
+      - dirty
+      - filthy
+      - smelly
+      - unkempt
+      - disheveled
+      - hoodie
+      - jacket
+      - coat
+      - hat
+      - beanie
+      - jeans
+      - sweatpants
+      - shirt
+      - shirtless
+      - boots
+      - sneakers
+    disability_and_health:
+      - disabled
+      - disability
+      - wheelchair
+      - crutches
+      - amputee
+      - blind
+      - deaf
+      - pregnant
+      - injured
+      - bleeding
+      - limping
+      - sick
+      - mentally ill
+      - mental illness
+      - mental health
+      - schizophrenic
+      - schizo
+      - psychotic
+      - psycho
+      - bipolar
+      - crazy
+      - insane
+    substance_use:
+      - drunk
+      - wasted
+      - intoxicated
+      - 're:\b(high\s+on|getting\s+high|was\s+high|is\s+high|so\s+high)\b'
+      - on drugs
+      - drugs
+      - addict
+      - addicts
+      - addicted
+      - addiction
+      - junkie
+      - junkies
+      - crackhead
+      - crackheads
+      - fiend
+      - overdose
+      - overdosed
+      - "re:\\bOD'?d\\b"
+      - needle
+      - needles
+      - syringe
+      - syringes
+      - fentanyl
+      - heroin
+      - crack
+      - meth
+      - booze
+
+privacy_patterns:
+  # Any match drops the quote (V2) or fails the summary/note check (V6). Normalization (docs/04 §5)
+  # already replaces most of these with [handle]/[email]/[phone]/[link]; these catch what slips through.
+  handle: 're:(?<![\w.])@[A-Za-z0-9_.]{2,30}\b'
+  email: 're:\b[\w.+-]+@[\w-]+\.[\w.-]+\b'
+  phone: 're:\(?\b\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b'
+  url: 're:\bhttps?://\S+|\bwww\.\S+'
+  street_address: 're:\b\d{1,5}\s+(\w+\s+){1,3}(st|street|ave|avenue|rd|road|ln|lane|dr|drive|ct|court|pl|place|blvd|boulevard|way|ter|terrace|hwy|highway|tpke|turnpike|pkwy|parkway)\b\.?'
+  license_plate_word: 're:\b(license\s+plate|plate\s+number|plates?|tags?)\b'
+  ny_plate_format: 're:\b[A-Z]{3}[-\s]?\d{4}\b'
+
+# ---------------------------------------------------------------------------
+# 6. Query templates (planner, docs/04 §6)
+#
+#    {place} is filled from the gazetteer rotation; {place_station} uses the station name without
+#    "station". Keyword syntax (quotes, OR) differs by platform and is [verify] for every SocialCrawl
+#    search endpoint. If an endpoint does not support quotes, the planner strips them and relies on
+#    the prefilter.
+#    providers: which collectors use the template. "keyword" = SocialCrawl keyword_search, Google News
+#    and Firecrawl search. "semantic" = Exa (natural-language queries work better there).
+# ---------------------------------------------------------------------------
+
+query_templates:
+  region_wide:          # every scan (docs/04 §6 step 1)
+    keyword:
+      - 'homeless "Long Island"'
+      - 'homeless encampment "Long Island"'
+      - 'encampment "Suffolk County"'
+      - 'encampment "Nassau County"'
+      - '"sleeping in" LIRR station homeless'
+      - '"living in" car "Nassau County"'
+      - '"living in" car "Suffolk County"'
+      - 'homeless camp woods "Long Island"'
+      - '"sin hogar" "Long Island"'
+    semantic:
+      - "people sleeping at a Long Island Rail Road station"
+      - "homeless encampment in the woods on Long Island, New York"
+      - "someone living in a car in a parking lot in Suffolk County"
+      - "someone living in a car in a parking lot in Nassau County"
+      - "tents behind a shopping center on Long Island"
+
+  place:                # rotation and hot places (docs/04 §6 steps 2-3); 1-2 templates per place per scan
+    town_village_cdp:
+      keyword:
+        - '"{place}" homeless'
+        - '"{place}" homeless camp'
+        - '"{place}" "living in" car'
+        - '"{place}" "sin hogar"'
+      semantic:
+        - "people experiencing homelessness sleeping outside in {place}, Long Island"
+    lirr_station:
+      keyword:
+        - '"{place_station} station" homeless'
+        - '"{place_station} LIRR" homeless'
+        - '"{place_station} train station" sleeping'
+      semantic:
+        - "people sleeping at the {place_station} LIRR station"
+    landmark:           # park, beach, mall, transit, library
+      keyword:
+        - '"{place}" homeless'
+      semantic:
+        - "people sleeping outside at {place} on Long Island"

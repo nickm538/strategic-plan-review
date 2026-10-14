@@ -1,0 +1,117 @@
+{
+  "$comment": "Structured-output schema for the PIT Radar classifier (docs/05). Sent as output_config.format.schema. Kept to basic JSON Schema keywords (type, enum, properties, required, additionalProperties, items); length and count limits are enforced in code after parsing (verifier.py), not here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "relevance",
+    "signal_type",
+    "not_relevant_reason",
+    "in_long_island_counties",
+    "area_basis",
+    "time_reference",
+    "location",
+    "people_count_estimate",
+    "flags",
+    "evidence_quotes",
+    "neutral_summary",
+    "decision_basis",
+    "confidence"
+  ],
+  "properties": {
+    "relevance": {
+      "type": "string",
+      "enum": ["relevant", "not_relevant", "uncertain"],
+      "description": "relevant = the post reports one or more people experiencing unsheltered homelessness at an identifiable place, an encampment, people living in a vehicle, or the poster's own current homelessness."
+    },
+    "signal_type": {
+      "type": "string",
+      "enum": ["encampment", "individual_unsheltered", "vehicle_dwelling", "self_report", "none"]
+    },
+    "not_relevant_reason": {
+      "type": "string",
+      "enum": [
+        "none",
+        "general_discussion_or_opinion",
+        "policy_news_or_statistics",
+        "fundraiser_event_or_promotion",
+        "shelter_or_housed_situation",
+        "animal",
+        "outside_nassau_suffolk",
+        "past_event_not_current",
+        "metaphor_joke_or_unrelated",
+        "insufficient_information"
+      ]
+    },
+    "in_long_island_counties": {
+      "type": "string",
+      "enum": ["yes", "no", "unclear"],
+      "description": "Is the reported situation in Nassau County or Suffolk County, NY (NOT Queens, Brooklyn, Long Island City, or a same-named place elsewhere)?"
+    },
+    "area_basis": {
+      "type": "string",
+      "description": "Short phrase naming what in the post (or its source context) establishes the county, e.g. 'mentions Bay Shore LIRR station' or 'r/longisland post naming Hempstead'. Empty string if unclear."
+    },
+    "time_reference": {
+      "type": "string",
+      "enum": ["current", "ongoing", "past", "unclear"],
+      "description": "current = happening now/today/last night/this week; ongoing = described as continuing ('every night', 'for weeks', 'still there'); past = clearly over or a specific older date; unclear = no time cue."
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mentioned", "location_text", "location_kind", "is_private_residence"],
+      "properties": {
+        "mentioned": { "type": "boolean" },
+        "location_text": {
+          "type": "string",
+          "description": "VERBATIM span copied exactly from the post text that names the place (e.g. 'the Ronkonkoma train station', 'behind the 7-Eleven on Montauk Hwy in Bay Shore'). Empty string if none."
+        },
+        "location_kind": {
+          "type": "string",
+          "enum": ["named_place", "intersection", "street", "business", "town_only", "none"]
+        },
+        "is_private_residence": { "type": "boolean" }
+      }
+    },
+    "people_count_estimate": {
+      "type": "integer",
+      "description": "Only if the post states a number or an unambiguous count (e.g. 'two guys', 'a couple'); otherwise -1. Never guess. The app stores -1 as NULL."
+    },
+    "flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["possible_minors", "medical_concern", "weather_exposure", "safety_concern"],
+      "properties": {
+        "possible_minors": { "type": "boolean" },
+        "medical_concern": { "type": "boolean" },
+        "weather_exposure": { "type": "boolean" },
+        "safety_concern": { "type": "boolean" }
+      }
+    },
+    "evidence_quotes": {
+      "type": "array",
+      "description": "1-2 VERBATIM quotes copied exactly from the post, each under 30 words, chosen to show the situation, place and timing. Must not contain names, usernames, or physical descriptions of people. Empty array if not relevant.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["text", "supports"],
+        "properties": {
+          "text": { "type": "string" },
+          "supports": { "type": "string", "enum": ["situation", "location", "recency", "count"] }
+        }
+      }
+    },
+    "neutral_summary": {
+      "type": "string",
+      "description": "One sentence, under 240 characters, describing only the situation and the place. No names, usernames, physical descriptions, clothing, age, race/ethnicity, gender, or health details. Empty string if not relevant."
+    },
+    "decision_basis": {
+      "type": "string",
+      "description": "One short sentence linking the quoted evidence to the decision (e.g. 'Post says two tents are behind the library in Patchogue as of this week')."
+    },
+    "confidence": {
+      "type": "number",
+      "description": "0 to 1: confidence that this is a relevant, current, in-area signal."
+    }
+  }
+}

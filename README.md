@@ -17,6 +17,7 @@ An independent, line-by-line review of the *Long Island Continuum of Care: Strat
 | [`analysis/checks.py`](analysis/checks.py) → [`checks-output.txt`](analysis/checks-output.txt) | Recomputes every number in the review |
 | [`analysis/register.py`](analysis/register.py) | Source of truth for the register; regenerates Appendix C |
 | [`analysis/draft_vs_final.py`](analysis/draft_vs_final.py) | Sentence-level draft/final comparison |
+| [`pit-radar/`](pit-radar/README.md) | **Separate project:** build specification for PIT Radar, an internal, place-level outreach tool for LICH that maps recent public posts about unsheltered homelessness in Nassau and Suffolk. Specification only; nothing is built or run yet |
 
 ## Reproduce
 

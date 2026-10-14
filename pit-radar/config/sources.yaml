@@ -1,0 +1,195 @@
+# PIT Radar — sources
+#
+# Where the collectors look (docs/04). Every entry marked `verify: true` was written from general
+# knowledge in a sandbox that could not reach these services. Confirm each one in build Phase 3
+# (docs/11) before enabling it. Do not invent endpoint ids: they come from SocialCrawl's free catalog.
+#
+# source_scope (used by the prefilter anchor rule and score, docs/04 §5):
+#   li_scoped = a Long Island subreddit or news outlet; anything from it counts as a Long Island anchor
+#   regional  = NYC-area outlets that also cover Long Island; text must still name an LI place
+#   general   = everything else
+
+version: 1
+
+# ---------------------------------------------------------------------------
+# SocialCrawl  (docs/04 §2)  base URL, auth header, envelope and errors: [verified]
+# ---------------------------------------------------------------------------
+socialcrawl:
+  base_url: https://www.socialcrawl.dev
+  max_in_flight: 10            # documented limit is 50 per key [verified]; stay well under it
+
+  # SocialCrawl platform slug -> this app's `platform` value (schemas/normalized-item.schema.json).
+  # The slugs on the left are [verify]; read them from /v1/utility/quickstart?platform=... .
+  platform_map:
+    reddit: reddit
+    twitter: x
+    threads: threads
+    bluesky: bluesky
+    tiktok: tiktok
+    youtube: youtube
+    facebook: facebook
+    instagram: instagram
+    google_news: news
+
+  # Capabilities are resolved to endpoint ids at startup and daily (docs/04 §2.2):
+  #   1. call GET /v1/utility/endpoints?search=<discovery_search> for each platform
+  #   2. prefer `pinned_endpoint` if it still exists, else the cheapest matching endpoint
+  #   3. cache GET /v1/utility/endpoint?id=<id> (parameters, cost, paging) and validate every call
+  # After the first discovery run, an admin pins the chosen ids here. Until then all are null.
+  capabilities:
+    keyword_search:
+      description: Search public posts by keyword, newest first when a sort or time parameter exists
+      discovery_search: ["search", "search posts", "keyword"]
+      prefer_params: { sort: [latest, recent, new, date], time: [day, week, month] }
+      platforms:
+        reddit:    { enabled: true,  pinned_endpoint: null, verify: true }
+        twitter:   { enabled: true,  pinned_endpoint: null, verify: true }
+        threads:   { enabled: true,  pinned_endpoint: null, verify: true }
+        bluesky:   { enabled: true,  pinned_endpoint: null, verify: true }
+        tiktok:    { enabled: true,  pinned_endpoint: null, verify: true }
+        youtube:   { enabled: true,  pinned_endpoint: null, verify: true }
+        facebook:  { enabled: true,  pinned_endpoint: null, verify: true, note: "public pages and posts only; what Facebook search covers is [verify]" }
+        instagram: { enabled: false, pinned_endpoint: null, verify: true, note: "enable only if keyword search exists and yields text captions" }
+
+    subreddit_new:
+      description: Newest posts in one subreddit (cheapest high-yield source for Long Island)
+      discovery_search: ["subreddit posts", "subreddit new", "subreddit"]
+      platforms:
+        reddit: { enabled: true, pinned_endpoint: null, verify: true }
+
+    subreddit_search:
+      description: Keyword search inside one subreddit, recency-sorted if possible
+      discovery_search: ["subreddit search", "search subreddit"]
+      platforms:
+        reddit: { enabled: true, pinned_endpoint: null, verify: true }
+
+    post_comments:
+      description: Comments on a thread that passed the prefilter; each comment becomes its own item
+      discovery_search: ["post comments", "comments"]
+      platforms:
+        reddit: { enabled: true, pinned_endpoint: null, verify: true }
+
+    hashtag_posts:
+      description: Posts for a hashtag. Captions only; never fetch media (R1)
+      discovery_search: ["hashtag", "hashtag posts"]
+      platforms:
+        instagram: { enabled: false, pinned_endpoint: null, verify: true }
+        tiktok:    { enabled: false, pinned_endpoint: null, verify: true }
+
+    news_search:
+      description: Google News search
+      discovery_search: ["news", "google news search"]
+      platforms:
+        google_news: { enabled: true, pinned_endpoint: null, verify: true }
+
+# ---------------------------------------------------------------------------
+# Subreddits
+#   confidence: known     = widely known, large and active
+#   confidence: candidate = plausible name; confirm it exists, is public, is about Long Island NY, and
+#                           had posts in the last 30 days. Disable it if any check fails.
+# ---------------------------------------------------------------------------
+subreddits:
+  - { name: longisland,     source_scope: li_scoped, confidence: known,     verify: true, enabled: true }
+  - { name: LIRR,           source_scope: li_scoped, confidence: candidate, verify: true, enabled: true,  note: "station sightings are likely here" }
+  - { name: NassauCounty,   source_scope: li_scoped, confidence: candidate, verify: true, enabled: true }
+  - { name: SuffolkCounty,  source_scope: li_scoped, confidence: candidate, verify: true, enabled: true,  note: "check it is not Suffolk, VA or England" }
+  - { name: LongBeachNY,    source_scope: li_scoped, confidence: candidate, verify: true, enabled: true }
+  - { name: PortJefferson,  source_scope: li_scoped, confidence: candidate, verify: true, enabled: true }
+  - { name: Patchogue,      source_scope: li_scoped, confidence: candidate, verify: true, enabled: true }
+  - { name: Massapequa,     source_scope: li_scoped, confidence: candidate, verify: true, enabled: true }
+  - { name: Hamptons,       source_scope: li_scoped, confidence: candidate, verify: true, enabled: true }
+  - { name: Montauk,        source_scope: li_scoped, confidence: candidate, verify: true, enabled: true }
+  - { name: NorthFork,      source_scope: li_scoped, confidence: candidate, verify: true, enabled: true }
+  - { name: SBU,            source_scope: li_scoped, confidence: candidate, verify: true, enabled: false, note: "Stony Brook University; low expected yield" }
+  - { name: Hofstra,        source_scope: li_scoped, confidence: candidate, verify: true, enabled: false, note: "low expected yield" }
+
+# Never collect from these. Same-name or out-of-area communities produce false positives.
+excluded_subreddits:
+  - { name: longislandcity, reason: "Queens, out of scope" }
+  - { name: queens,         reason: "out of scope" }
+  - { name: brooklyn,       reason: "out of scope" }
+  - { name: nyc,            reason: "out of scope; LI items there are rare and better found by keyword search" }
+  - { name: huntington,     reason: "likely Huntington, WV; use only if verified to be Huntington, NY" }
+  - { name: levittown,      reason: "likely Levittown, PA; use only if verified to be Levittown, NY" }
+
+# ---------------------------------------------------------------------------
+# News domains (Exa includeDomains, docs/04 §3; also mark source_scope for any provider's results)
+# ---------------------------------------------------------------------------
+news_domains:
+  li_scoped:
+    - { domain: newsday.com,                   verify: true }
+    - { domain: longisland.news12.com,         verify: true }
+    - { domain: liherald.com,                  verify: true }
+    - { domain: longislandpress.com,           verify: true }
+    - { domain: tbrnewsmedia.com,              verify: true }
+    - { domain: 27east.com,                    verify: true }
+    - { domain: riverheadlocal.com,            verify: true }
+    - { domain: suffolktimes.timesreview.com,  verify: true }
+    - { domain: riverheadnewsreview.timesreview.com, verify: true }
+    - { domain: theislandnow.com,              verify: true }
+    - { domain: longislandadvance.net,         verify: true }
+    - { domain: easthamptonstar.com,           verify: true }
+    - { domain: sagharborexpress.com,          verify: true }
+    - { domain: danspapers.com,                verify: true }
+    - { domain: eastendbeacon.com,             verify: true }
+    - { domain: fireislandnews.com,            verify: true }
+    - { domain: smithtownnews.com,             verify: true }
+    - { domain: greaterlongisland.com,         verify: true }
+  regional:
+    - { domain: patch.com,      verify: true, note: "national site; LI town pages live under patch.com/new-york/<town>. Treat as li_scoped only when the URL path is an LI town" }
+    - { domain: pix11.com,      verify: true }
+    - { domain: abc7ny.com,     verify: true }
+    - { domain: nbcnewyork.com, verify: true }
+    - { domain: cbsnews.com,    verify: true, note: "only the /newyork/ section" }
+    - { domain: wshu.org,       verify: true }
+
+# ---------------------------------------------------------------------------
+# Hashtags (hashtag_posts). Disabled by default: LI town hashtags combined with homelessness terms are
+# mostly noise (docs/04 §2.3). Enable one at a time in the pilot and keep it only if it yields signals.
+# ---------------------------------------------------------------------------
+hashtags:
+  - { tag: longislandhomeless,  platforms: [instagram, tiktok], enabled: false, verify: true }
+  - { tag: homelesslongisland,  platforms: [instagram, tiktok], enabled: false, verify: true }
+  - { tag: suffolkcounty,       platforms: [instagram, tiktok], enabled: false, verify: true }
+  - { tag: nassaucounty,        platforms: [instagram, tiktok], enabled: false, verify: true }
+
+# ---------------------------------------------------------------------------
+# Exa  (docs/04 §3)  request and response shapes are [verify]
+# ---------------------------------------------------------------------------
+exa:
+  base_url: https://api.exa.ai
+  search:
+    type: auto
+    num_results: 10
+    text_max_characters: 4000
+    include_domains_from: [news_domains.li_scoped, news_domains.regional]
+    also_include_domains: [reddit.com]
+    # A second, unrestricted query family (no include_domains) runs the semantic templates so
+    # local forums and blogs can surface. Results without publishedDate are discarded.
+    unrestricted_family: true
+
+# ---------------------------------------------------------------------------
+# Firecrawl  (docs/04 §4)  request and response shapes are [verify]
+# ---------------------------------------------------------------------------
+firecrawl:
+  base_url: https://api.firecrawl.dev
+  search:
+    limit: 10
+    sources: [web, news]
+    location: "New York, United States"
+    tbs: "qdr:w"               # routine scans: past week, which covers search-index lag
+    tbs_backfill: "qdr:m"      # first run only: past month (= INGEST_MAX_AGE_DAYS default)
+  scrape_for_date:
+    formats: [markdown]
+    only_main_content: true
+    max_per_scan: 10           # scrape only results whose title/description passed the prefilter
+
+# ---------------------------------------------------------------------------
+# Not used, by design
+# ---------------------------------------------------------------------------
+not_used:
+  - { source: "Nextdoor",                    reason: "login-only neighborhood network; not public content" }
+  - { source: "Private Facebook groups",     reason: "not public; members expect privacy" }
+  - { source: "Citizen and police-scanner feeds", reason: "enforcement framing; conflicts with purpose limitation (R9)" }
+  - { source: "People-search and data-broker sites", reason: "person-level data; conflicts with R2/R3" }
+  - { source: "Photos and video from any platform",  reason: "R1: no media" }

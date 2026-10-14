@@ -1,0 +1,44 @@
+{
+  "$comment": "Common shape every collector produces (docs/04 §2.4-§5). Author/user fields are intentionally absent (privacy rule R2). Media is never fetched; only media_present is kept (R1).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["item_hash", "provider", "platform", "url", "published_at", "date_source", "collected_at", "text", "media_present", "context"],
+  "properties": {
+    "item_hash": { "type": "string", "description": "sha256(canonical_url)" },
+    "content_hash": { "type": "string", "description": "sha256(normalized text: lowercased, whitespace-collapsed, URLs removed)" },
+    "provider": { "type": "string", "enum": ["socialcrawl", "exa", "firecrawl"] },
+    "platform": { "type": "string", "enum": ["reddit", "x", "tiktok", "instagram", "threads", "bluesky", "facebook", "youtube", "news", "web"] },
+    "url": { "type": "string", "description": "Canonical public permalink to the post/comment/article. Never a profile URL." },
+    "platform_post_id": { "type": "string", "description": "Platform's id for the post/comment; hashed before storage in signals.post_id_hash" },
+    "published_at": { "type": "string", "description": "UTC ISO 8601. Items without a reliable publish time are discarded before this object is created." },
+    "date_source": { "type": "string", "enum": ["platform", "provider", "page_metadata", "relative"] },
+    "collected_at": { "type": "string", "description": "UTC ISO 8601" },
+    "title": { "type": "string" },
+    "text": { "type": "string", "description": "Title + body/caption or comment body, with @handles, emails, phone numbers and URLs replaced by [handle]/[email]/[phone]/[link]. Max 6,000 chars." },
+    "lang": { "type": "string", "description": "ISO 639-1 if known (en, es, ...)" },
+    "media_present": { "type": "boolean" },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["query", "source_scope"],
+      "properties": {
+        "query": { "type": "string", "description": "The planned query that found this item" },
+        "query_place_id": { "type": ["integer", "null"] },
+        "source_scope": { "type": "string", "enum": ["li_scoped", "regional", "general"], "description": "li_scoped = LI subreddit or LI news domain" },
+        "subreddit": { "type": "string" },
+        "hashtags": { "type": "array", "items": { "type": "string" } },
+        "platform_place_tag": { "type": "string", "description": "Name of a platform geotag if present (never coordinates)" },
+        "is_comment": { "type": "boolean" },
+        "parent_title": { "type": "string", "description": "For comments: the thread title, for context" }
+      }
+    },
+    "prefilter": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "matched_signal_terms": { "type": "array", "items": { "type": "string" } },
+        "matched_places": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
