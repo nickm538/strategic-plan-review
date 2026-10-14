@@ -28,6 +28,7 @@ Required:
 | `SESSION_SECRET` | 48+ random characters. Generate one: `python3 -c "import secrets; print(secrets.token_urlsafe(48))"` |
 | `NOMINATIM_CONTACT_EMAIL` | A LICH email address (required by the OpenStreetMap geocoder's usage policy) |
 | `APP_BASE_URL` | The Railway URL from step 3, e.g. `https://pit-radar-production.up.railway.app` |
+| `BOOTSTRAP_ADMIN_NAME`, `BOOTSTRAP_ADMIN_PASSWORD` | Your first sign-in (see step 4) |
 
 Every other variable in `config/.env.example` has a working default. Budgets, thresholds and PIT dates can be
 changed later in the app (Admin screen) without a redeploy. **Rotate keys first:** the keys pasted in the planning
@@ -41,16 +42,20 @@ Any provider key can be left blank to start; the app skips that provider and say
 2. Deploy (Railway redeploys automatically when variables change). Watch **Deployments → Logs** for
    `PIT Radar started` and a passing health check.
 
-## 4. Create the first admin
+## 4. Create the first admin (your sign-in)
 
-Service → **⋯ → Shell** (or `railway ssh`), then:
+The app is login-only and has no default account. Create yours with two more variables (service → Variables):
 
-```bash
-python scripts/create_user.py --name "Your Name" --role admin
-```
+| Variable | Value |
+|---|---|
+| `BOOTSTRAP_ADMIN_NAME` | The name you will sign in with, e.g. `Nick` |
+| `BOOTSTRAP_ADMIN_PASSWORD` | A password of 12+ characters that only you know |
 
-It asks for the password twice and never prints it. Add other staff later on the Admin screen (roles: viewer,
-reviewer, admin).
+Railway redeploys; on startup the app creates that admin **only if no users exist yet** (it can never add or change
+an account after that). Then open your Railway URL and sign in with exactly that name and password. You can delete
+both variables afterwards. Add other staff on the Admin screen (roles: viewer, reviewer, admin).
+
+Alternative, if you use the Railway CLI: `railway ssh`, then `python scripts/create_user.py --name "Your Name" --role admin`.
 
 ## 5. What happens on first boot
 

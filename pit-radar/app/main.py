@@ -66,6 +66,34 @@ def _tables_ok() -> bool:
     return True
 
 
+def bootstrap_admin(settings: Settings) -> str:
+    """Create the first admin from BOOTSTRAP_ADMIN_NAME / BOOTSTRAP_ADMIN_PASSWORD, but only while there are no users
+    at all. Returns a short status for the log; never logs the password."""
+    from app.audit import audit
+    from app.auth import hash_password, validate_new_password
+    from app.models import User
+
+    name = settings.bootstrap_admin_name.strip()
+    password = settings.bootstrap_admin_password.get_secret_value()
+    if not name and not password:
+        return "not configured"
+    with session_scope() as db:
+        if db.query(User.id).first() is not None:
+            return "skipped (users already exist)"
+        if not name or not password:
+            return "skipped (set both BOOTSTRAP_ADMIN_NAME and BOOTSTRAP_ADMIN_PASSWORD)"
+        err = validate_new_password(password, name=name)
+        if err:
+            return f"skipped (password rejected: {err})"
+        user = User(name=name[:80], role="admin", password_hash=hash_password(password), active=True,
+                    password_changed_at=utcnow())
+        db.add(user)
+        db.flush()
+        audit(db, "admin_change", user_id=user.id, object_type="user", object_id=user.id,
+              details={"action": "bootstrap_admin", "name": user.name})
+    return f"created first admin '{name[:80]}'"
+
+
 def _load_overrides() -> tuple[Any, Any, Any]:
     try:
         with session_scope() as db:
@@ -128,6 +156,11 @@ def create_app(*, start_background: bool = True) -> FastAPI:
 
         _guard_data_path()
         db_ok = _tables_ok()
+        if db_ok:
+            try:
+                logger.info("first-admin bootstrap: %s", bootstrap_admin(settings))
+            except Exception as exc:  # noqa: BLE001 - never block startup on this
+                logger.error("first-admin bootstrap failed (%s)", type(exc).__name__)
         state = build_state(settings)
         app.state.pit = state
         scheduler = Scheduler(state)

@@ -336,7 +336,8 @@ def rate_limit_export(limiter: Optional[RateLimiter] = None, *, limit: int = EXP
 
 # --- Log redaction ---------------------------------------------------------------
 
-_SECRET_FIELDS = ("socialcrawl_api_key", "exa_api_key", "firecrawl_api_key", "anthropic_api_key", "session_secret")
+_SECRET_FIELDS = ("socialcrawl_api_key", "exa_api_key", "firecrawl_api_key", "anthropic_api_key", "session_secret",
+                  "bootstrap_admin_password")
 _MIN_SECRET_LEN = 8   # shorter values would garble ordinary log text; real keys are far longer
 
 _CREDENTIAL_NAMES = (r"x-api-key|x-csrf-token|api[_-]?key|apikey|authorization|access[_-]?token|refresh[_-]?token|"

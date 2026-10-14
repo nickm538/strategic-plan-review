@@ -29,6 +29,9 @@ class Settings(BaseSettings):
     firecrawl_api_key: SecretStr = SecretStr("")
     anthropic_api_key: SecretStr = SecretStr("")
     session_secret: SecretStr = SecretStr("")
+    # First admin, created at startup ONLY while the users table is empty (so no shell is needed on Railway).
+    bootstrap_admin_name: str = ""
+    bootstrap_admin_password: SecretStr = SecretStr("")
 
     # --- App -----------------------------------------------------------------
     app_env: Literal["production", "development", "test"] = "production"
