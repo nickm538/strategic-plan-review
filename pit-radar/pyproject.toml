@@ -1,0 +1,15 @@
+[project]
+name = "pit-radar"
+version = "1.0.0"
+description = "Place-level outreach signal map for the Long Island Coalition for the Homeless (internal)."
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning:httpx2.*"]
+markers = [
+  "live: calls a real external API (never run in CI; requires keys + network)",
+]

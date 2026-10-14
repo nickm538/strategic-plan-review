@@ -95,3 +95,28 @@ Every export writes an `audit_log` row (`export`, with filters).
 ## 6. Health
 
 `GET /healthz` (public, no data): `{ "ok": true, "db": "ok", "scheduler": "running", "last_scan_at": "…" }`. Used by Railway's health check.
+
+## 7. Implementation addendum (v1.0 build)
+
+Endpoints added during the build. Same rules: session cookie required (except where marked public), CSRF header on writes, role in the third column.
+
+| Method | Path | Role | Returns / body |
+|---|---|---|---|
+| GET | `/` | session, else 302 → `/login` | The app shell (`static/index.html`). No data is embedded in the HTML |
+| GET | `/login` | public | Login page (`static/login.html`) |
+| GET | `/static/*` | public | App JS/CSS, vendored MapLibre and deck.gl, icons. No data |
+| GET | `/api/geo/counties` | viewer | Simplified GeoJSON FeatureCollection of Nassau and Suffolk (`properties.county`), for the outline glow and the outside-scope mask. `{"type":"FeatureCollection","features":[]}` with `"ready": false` until geography is built |
+| GET | `/api/geo/labels` | viewer | `{ items: [{name, kind, county, lat, lon}] }`: towns, cities, villages and CDPs from the gazetteer, for map labels |
+| POST | `/api/me/password` | any | `{ current_password, new_password }` |
+| GET | `/api/health` | viewer | `{ providers: {socialcrawl\|exa\|firecrawl\|anthropic\|nominatim: {status, message, checked_at, credits_remaining}}, geo: {state, message, counts, built_at}, scheduler: {running, current_scan_id, last_scan_at, last_scan_status, next_scan_at}, mode: "standard"\|"pit", scans_paused }` |
+| PUT | `/api/hotspots/{id}/notes` | reviewer | `{ "notes": "…" }`. Rejected with 422 and a friendly message if the R3 check fails |
+| POST | `/api/self-reports/{id}/responded` | reviewer | Marks the self-report as responded (a `reviews` row, action `responded`) |
+| GET | `/api/admin/settings` | admin | `{ effective: {KEY: value}, overrides: {KEY: value}, overridable: [KEY…], pit_mode, scans_paused, selfreport_reply_template }` |
+| PUT | `/api/admin/settings` | admin | `{ "KEY": value, … }` for any overridable key, `SCANS_PAUSED`, `PIT_MODE_MANUAL`, or `SELFREPORT_REPLY_TEMPLATE`; `null` removes an override. 422 lists invalid keys |
+| PATCH | `/api/admin/users/{id}` | admin | `{ role?, active?, new_password? }` (cannot demote or deactivate the last active admin) |
+| POST | `/api/admin/socialcrawl/discover` | admin | Runs endpoint discovery now; returns the resolved map |
+| POST | `/api/admin/geo/rebuild` | admin | Starts a geography rebuild in the background |
+| GET / PUT | `/api/admin/lexicon` | admin | GET: the effective lexicon (file + overrides). PUT: `{ overrides: {list_name: [entries]} }`, validated by compiling every entry |
+| GET / PUT | `/api/admin/sources` | admin | GET: effective sources. PUT: `{ overrides: {...} }` to enable/disable subreddits, hashtags, platforms and domains |
+
+`GET /api/stats` also returns `funnel_last_scan` and `funnel_7d` (the stage counts summed), plus `drop_reasons_7d`. `GET /api/signals` and `/api/hotspots` accept `bbox=minLon,minLat,maxLon,maxLat`. Individual signal coordinates are returned only to reviewers and admins, and only for `precision = public_place` (R11). Viewers get hotspot-level coordinates only.

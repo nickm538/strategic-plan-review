@@ -1,0 +1,14 @@
+{
+  "name": "pit-radar-vendor",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Fetches pinned map libraries into static/vendor (served same-origin; no CDN at runtime).",
+  "license": "UNLICENSED",
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs"
+  },
+  "dependencies": {
+    "deck.gl": "9.4.0",
+    "maplibre-gl": "5.24.0"
+  }
+}

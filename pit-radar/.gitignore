@@ -17,3 +17,7 @@ __pycache__/
 .pytest_cache/
 node_modules/
 static/vendor/
+var/
+*.egg-info/
+test-results/
+playwright-report/
