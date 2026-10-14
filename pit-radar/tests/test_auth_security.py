@@ -14,8 +14,8 @@ from app.config import Settings, get_settings, reset_settings_cache
 
 DEFAULT_CSP = (
     "default-src 'self'; script-src 'self'; style-src 'self'; "
-    "img-src 'self' data: blob: https://tiles.openfreemap.org; "
-    "connect-src 'self' https://tiles.openfreemap.org; "
+    "img-src 'self' data: blob: https://tiles.openfreemap.org https://orthos.its.ny.gov; "
+    "connect-src 'self' https://tiles.openfreemap.org https://orthos.its.ny.gov; "
     "worker-src 'self' blob:; child-src 'self' blob:; font-src 'self' data:; object-src 'none'; "
     "manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
 )

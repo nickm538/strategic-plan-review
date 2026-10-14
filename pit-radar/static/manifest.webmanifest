@@ -1,0 +1,16 @@
+{
+  "name": "PIT Radar — NY-603",
+  "short_name": "PIT Radar",
+  "description": "Outreach and PIT planning map for the Long Island Coalition for the Homeless. Internal use only.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070B14",
+  "theme_color": "#0D1424",
+  "icons": [
+    { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/static/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

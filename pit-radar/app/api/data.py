@@ -474,6 +474,11 @@ def health(request: Request, db: Session = Depends(get_db), now: dt.datetime = D
         "running": state.scheduler.running, "current_scan_id": state.scheduler.current_scan_id,
         "last_scan_at": iso(state.scheduler.last_scan_at), "last_scan_status": state.scheduler.last_scan_status,
         "next_scan_at": iso(state.scheduler.next_scan_at)}
+    if not sched_status.get("last_scan_at"):  # after a restart the in-memory status is empty; use the DB
+        last = db.scalars(select(ScanRun).where(ScanRun.status.in_(("ok", "partial", "failed")))
+                          .order_by(ScanRun.id.desc()).limit(1)).first()
+        if last is not None:
+            sched_status = {**sched_status, "last_scan_at": iso(last.started_at), "last_scan_status": last.status}
     return {"providers": _health_records(db), "geo": dict(state.geo_status), "scheduler": sched_status,
             "mode": eff.mode, "scans_paused": eff.scans_paused}
 
@@ -537,6 +542,14 @@ def config_client(request: Request, db: Session = Depends(get_db), now: dt.datet
             "style_url": s.map_style_url or None,
             "tile_hosts": s.tile_hosts,
             "vector_tiles": "https://tiles.openfreemap.org/planet",
+            # Verified Oct 2026: OpenFreeMap publishes these styles with no key (openfreemap.org/quick_start).
+            "styles": {"streets": "https://tiles.openfreemap.org/styles/liberty",
+                       "dark": "https://tiles.openfreemap.org/styles/dark"},
+            # New York State orthoimagery (2022-2025), Web Mercator, ArcGIS export as 512 px tiles.
+            "aerial": {"tiles": ["https://orthos.its.ny.gov/arcgis/rest/services/wms/Latest/MapServer/export"
+                                 "?bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&size=512,512&format=jpg"
+                                 "&transparent=false&f=image"],
+                       "attribution": "Aerial imagery: NYS ITS Geospatial Services"},
         },
         "banner": PURPOSE_NOTICE,
         "pit_mode": eff.pit_mode,

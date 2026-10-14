@@ -1,0 +1,14 @@
+.venv/
+node_modules/
+static/vendor/
+var/
+tests/
+docs/
+.env
+.env.*
+**/__pycache__/
+*.pyc
+*.db
+*.db-*
+.pytest_cache/
+.git/

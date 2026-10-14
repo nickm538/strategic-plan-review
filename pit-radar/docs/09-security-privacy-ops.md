@@ -39,49 +39,9 @@ Unit tests assert that no field outside the allow-list can reach `signals` (docs
 
 ## 5. Deployment on Railway
 
-> Railway specifics below are standard practice but **[verify]** each against current Railway docs at build time (Root Directory, `railway.json` keys, volume behavior, health checks).
+Built files: `Dockerfile` (node stage vendors MapLibre + deck.gl; Python 3.12 stage runs the app as the image's root user because Railway volumes mount root-owned), `scripts/start.sh` (runs `alembic upgrade head`, then one uvicorn worker with `--proxy-headers`), `railway.json` (Dockerfile builder, `/healthz` health check with a 300 s timeout, restart on failure) and `.dockerignore`. Step-by-step launch: **[docs/13](13-railway-launch.md)**.
 
-**Service setup**
-1. In Railway: *New Project → Deploy from GitHub repo* → select `nickm538/strategic-plan-review`. Set **Root Directory** to `pit-radar`. Railway builds `pit-radar/Dockerfile`.
-2. Add a **Volume** mounted at `/data` (SQLite file `/data/pit-radar.db`), **or** add the Postgres plugin and set `DATABASE_URL`. Use one replica (the scheduler runs in-process and SQLite is single-writer).
-3. Set **Variables** from `config/.env.example`: all API keys, `SESSION_SECRET` (32+ random bytes), `APP_BASE_URL`, budgets, `NOMINATIM_CONTACT_EMAIL`. Set the variables in Railway only; never commit them.
-4. Health check path `/healthz`. Generate a Railway domain; optionally map a LICH subdomain.
-5. Create the first admin by running `python scripts/create_user.py --name <name> --role admin` in a Railway shell. It prompts for the password and never echoes it.
-
-**`pit-radar/railway.json` (sketch, verify schema):**
-```json
-{
-  "$schema": "https://railway.com/railway.schema.json",
-  "build": { "builder": "DOCKERFILE", "dockerfilePath": "Dockerfile" },
-  "deploy": {
-    "startCommand": "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips='*'",
-    "healthcheckPath": "/healthz",
-    "healthcheckTimeout": 60,
-    "restartPolicyType": "ON_FAILURE",
-    "numReplicas": 1
-  }
-}
-```
-
-**Dockerfile (sketch):**
-```dockerfile
-FROM node:22-slim AS vendor
-WORKDIR /v
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev        # maplibre-gl + deck.gl only, pinned versions
-FROM python:3.12-slim
-WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-COPY --from=vendor /v/node_modules/maplibre-gl/dist ./static/vendor/maplibre-gl
-COPY --from=vendor /v/node_modules/deck.gl/dist.min.js ./static/vendor/deck.gl/dist.min.js
-RUN useradd -m app && mkdir -p /data && chown app /data
-USER app
-ENV PYTHONUNBUFFERED=1
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers"]
-```
-**[verify]** the deck.gl standalone bundle path inside the npm package for the pinned version.
+Basemap hosts in the CSP come from `MAP_TILE_HOSTS` (default `tiles.openfreemap.org,orthos.its.ny.gov`). deck.gl's bundled 3D-tiles loader probes WebAssembly at load; the CSP blocks it on purpose (it falls back to JavaScript; no layer we use needs it).
 
 ## 6. Monitoring and runbook
 

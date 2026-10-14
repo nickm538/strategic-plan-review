@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0D1424">
+  <title>Sign in · PIT Radar</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/static/icons/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/static/css/app.css">
+  <script type="module" src="/static/js/login.js"></script>
+</head>
+<body class="login">
+  <main class="login-wrap">
+    <section class="login-card glass" aria-labelledby="login-title">
+      <h1 id="login-title"><img src="/static/icons/icon-192.png" alt="" width="36" height="36"> PIT Radar</h1>
+      <p class="muted">Long Island Coalition for the Homeless · NY-603 outreach</p>
+      <form id="login-form" novalidate>
+        <label class="field">Name<input id="name" name="name" type="text" autocomplete="username" required maxlength="80" autofocus></label>
+        <label class="field">Password<input id="password" name="password" type="password" autocomplete="current-password" required maxlength="256"></label>
+        <div id="login-error" class="field-error" role="alert"></div>
+        <button class="btn primary" type="submit" id="login-submit">Sign in</button>
+      </form>
+      <p class="login-notice">For outreach and PIT planning only. Not for enforcement. Do not share outside LICH outreach.</p>
+    </section>
+  </main>
+</body>
+</html>

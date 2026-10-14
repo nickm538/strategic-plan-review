@@ -4,7 +4,20 @@
 
 **What it is not:** a tool for tracking or profiling individuals. It never stores photos, names, physical descriptions or poster handles. It is not for enforcement, and its data is not shared with law enforcement or code enforcement. See [docs/01](docs/01-requirements-and-guardrails.md).
 
-> **Status:** specification only. Nothing here has been built or run yet. This spec was written in a sandbox that could not reach the data APIs. Facts confirmed against live sources on **Oct 14, 2026** are marked **[verified]**; everything marked **[verify]** must be confirmed during the build. See [docs/11](docs/11-build-plan-and-prompts.md) for the build order and ready-to-paste prompts.
+> **Status: v1.0 built.** The app is complete and tested here end to end (pipeline, API, 3D UI) with simulated providers. Live provider calls run once you deploy and paste your keys: **launch guide → [docs/13](docs/13-railway-launch.md)**. Facts confirmed against live sources are marked **[verified]**; anything still marked **[verify]** is checked automatically at startup (SocialCrawl endpoints) or listed in the launch guide.
+
+### Local development
+
+```bash
+cd pit-radar
+python3.12 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
+npm ci && npm run vendor                 # map libraries into static/vendor
+cp config/.env.example .env              # set SESSION_SECRET, APP_ENV=development, COOKIE_SECURE=false, keys
+.venv/bin/alembic upgrade head
+.venv/bin/python scripts/create_user.py --name you --role admin
+.venv/bin/uvicorn app.main:app --reload  # http://127.0.0.1:8000
+.venv/bin/pytest                         # ~900 tests
+```
 
 ## How it works (one paragraph)
 
@@ -47,6 +60,7 @@ Only signals that pass every check reach the map. Signals cluster into **hotspot
 | [config/lexicon.yaml](config/lexicon.yaml) | Search and prefilter vocabulary (English + Spanish) and exclusions |
 | [config/sources.yaml](config/sources.yaml) | Candidate subreddits, news domains, hashtags (to verify) |
 | [config/.env.example](config/.env.example) | Every environment variable with its default; secrets left blank |
+| [docs/13-railway-launch.md](docs/13-railway-launch.md) | **Launch on Railway, step by step** |
 
 ## Secrets
 

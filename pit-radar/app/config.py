@@ -96,7 +96,7 @@ class Settings(BaseSettings):
 
     # --- Map -----------------------------------------------------------------
     map_style_url: str = ""         # empty -> built-in dark style over OpenFreeMap vector tiles
-    map_tile_hosts: str = "tiles.openfreemap.org"
+    map_tile_hosts: str = "tiles.openfreemap.org,orthos.its.ny.gov"
 
     # --- Derived helpers -----------------------------------------------------
     @field_validator("database_url")
