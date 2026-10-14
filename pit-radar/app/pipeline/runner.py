@@ -527,7 +527,7 @@ def _signal_payloads(sig: Signal, hs: Optional[Hotspot]) -> dict[str, Any]:
     reviewers and admins get the full copy. Unmapped statuses never go to viewers."""
     from app.api import serializers
 
-    out: dict[str, Any] = {"full": None, "viewer": None, "hotspot": None, "error": None}
+    out: dict[str, Any] = {"full": None, "viewer": None, "hotspot": None, "hotspot_events": [], "error": None}
     try:
         min_role = serializers.min_role_for_signal(sig)
     except Exception:  # noqa: BLE001 - same rule as the serializer contract
@@ -543,8 +543,9 @@ def _signal_payloads(sig: Signal, hs: Optional[Hotspot]) -> dict[str, Any]:
             out["viewer"] = viewer
         if hs is not None:
             out["hotspot"] = serializers.hotspot_to_dict(hs)
+            out["hotspot_events"] = serializers.hotspot_events(hs)
     except Exception as exc:  # noqa: BLE001 - SSE is best effort; the signal is stored either way
-        out = {"full": None, "viewer": None, "hotspot": None, "error": type(exc).__name__}
+        out = {"full": None, "viewer": None, "hotspot": None, "hotspot_events": [], "error": type(exc).__name__}
     return out
 
 
@@ -1405,8 +1406,8 @@ async def _store(ctx: _Scan, row_id: Optional[int], item: NormalizedItem, result
         ctx.publish(ev.SIGNAL_NEW, payloads["full"], min_role="reviewer")
     if payloads.get("viewer") is not None:
         ctx.publish(ev.SIGNAL_NEW, payloads["viewer"], min_role="viewer", max_role="viewer")
-    if payloads.get("hotspot") is not None:
-        ctx.publish(ev.HOTSPOT_UPDATED, payloads["hotspot"], min_role="viewer")
+    for payload, min_role, max_role in payloads.get("hotspot_events") or []:
+        ctx.publish(ev.HOTSPOT_UPDATED, payload, min_role=min_role, max_role=max_role)
 
 
 async def _drop_item(ctx: _Scan, row_id: Optional[int], item: NormalizedItem, decision: str) -> None:

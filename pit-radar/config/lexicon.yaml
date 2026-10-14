@@ -47,6 +47,10 @@ encampment_terms:
   - 're:\bsquatting\s+in\s+(an?\s+|the\s+)?(abandoned|empty|vacant)\b'
   - 're:\btents?\s+(behind|under|beneath|near|by|next\s+to|in\s+the\s+woods|in\s+the\s+park)\b'
   - 're:\btarps?\s+(and|with)\s+(belongings|shopping\s+carts?|mattress(es)?|blankets)\b'
+  - 're:\btents?\s+(were\s+|are\s+|is\s+|being\s+|got\s+)?(set\s+up|pitched|put\s+up|popping\s+up|popped\s+up|went\s+up|going\s+up)\b'
+  - 're:\b(set\s+up|pitched|put\s+up)\s+(a\s+|some\s+|their\s+|his\s+|her\s+)?(tents?|tarps?|camp)\b'
+  - 're:\btents?\s+(\w+\s+){0,3}?(in\s+the\s+woods|under\s+the\s+(bridge|overpass|trestle))\b'
+  - 're:\bcamping\s+out\s+(behind|under|in|at|near|by)\b'   # also concerts/tickets; the classifier decides
 
 individual_sighting_terms:
   - homeless                    # the bare word; most posts use it. Opinion and policy posts also match, and
