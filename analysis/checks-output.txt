@@ -1,0 +1,184 @@
+
+==============================================================================
+1. PIT 2025 table arithmetic (plan p. 2)
+==============================================================================
+  row Households  [2286, 54, 18, 320] sum= 2678 stated total= 2678  OK
+  row Persons     [4139, 63, 18, 320] sum= 4540 stated total= 4540  OK
+  row under 18    [1483, 9, 0, 1] sum= 1493 stated total= 1493  OK
+  row 18-24       [293, 12, 2, 10] sum=  317 stated total=  317  OK
+  row 25-34       [571, 8, 1, 41] sum=  621 stated total=  621  OK
+  row 35-44       [615, 4, 4, 91] sum=  714 stated total=  714  OK
+  row 45-54       [484, 3, 3, 80] sum=  570 stated total=  570  OK
+  row 55-64       [487, 10, 1, 74] sum=  572 stated total=  572  OK
+  row over 64     [206, 17, 7, 23] sum=  253 stated total=  253  OK
+  col Emergency    age-sum= 4139 stated persons= 4139  OK
+  col Transitional age-sum=   63 stated persons=   63  OK
+  col Safe Haven   age-sum=   18 stated persons=   18  OK
+  col Unsheltered  age-sum=  320 stated persons=  320  OK
+  col Total        age-sum= 4540 stated persons= 4540  OK
+  ALL TABLE SUMS RECONCILE: True
+
+  Sheltered persons 4220 (93.0%), unsheltered 320 (7.0%)
+  Children under 18: 1493 = 32.9% of all persons (Comptroller: 32.9%)
+  Persons per household: ES 1.81, TH 1.17, SH 1.00, Unsheltered 1.00, All 1.70
+  Unsheltered 55-64: 74/320 = 23.1%  (plan: 'just over 20%')
+  Unsheltered 55+:   97/320 = 30.3%
+  All persons 55+:   825/4540 = 18.2%  (press reports of LICH release: 'just over 670' in 2024 -> 825 in 2025)
+  55+ growth 2024->2025 if 2024 = 670: +23.1% (vs +13.4% overall)
+  Unsheltered adults (18+): 319; unaccompanied minors unsheltered: 1
+  Age distribution of unsheltered: under 18 0.3%, 18-24 3.1%, 25-34 12.8%, 35-44 28.4%, 45-54 25.0%, 55-64 23.1%, over 64 7.2%
+  Age distribution of sheltered:   under 18 35.4%, 18-24 7.3%, 25-34 13.7%, 35-44 14.8%, 45-54 11.6%, 55-64 11.8%, over 64 5.5%
+
+  Implied 2024 PIT total from Comptroller's +13.4%: ~4,004 persons
+
+==============================================================================
+2. Length-of-time statements
+==============================================================================
+  251 days = 8.25 months (plan says 'almost 7 months'; 7 months = 213 days)
+  Families with 3+ children (8% of households)   403 days  +152 vs overall (+60.6%)  LONGER than average
+  Single adults 55+ (23% of households)          246 days  -5 vs overall (-2.0%)  SHORTER than average
+  Households with a disabled member (40%)        219 days  -32 vs overall (-12.7%)  SHORTER than average
+  -> Plan introduces all three as groups whose challenges 'prolonged their homelessness'; two of the three are below the overall average.
+
+  p.1 says average episode = 251 days; p.7 says shelter users stayed 261 days.
+  If both are right, the 8% who never used shelter averaged (251 - 0.92*261)/0.08 = 136 days. Possible, but confirm 261 is not a typo for 251.
+
+==============================================================================
+3. Flow consistency (Little's Law)
+==============================================================================
+  Sheltered households on PIT night (2025): 2358
+  Implied entries = 2358/251 = 9.39 households/day = 3,429/year
+  Implied households served in a year = stock + entries = 5,787
+  Same calculation at the implied 2024 level (/1.134): 5,103
+  Plan: 5,447 households assisted in FY2024 -> sits between the two estimates; the plan's flow numbers hang together.
+
+  Unsheltered: 472 adults over Apr 2023-Apr 2025 (24 months) vs 319 unsheltered adults on one night (Jan 2025).
+  For both to be complete counts of the same group, only ~153 people entered in two years,
+  implying an average unsheltered spell of ~1,522 days (~4.2 years).
+  More likely the 472 counts only adults recorded in HMIS (e.g., outreach-enrolled); the plan should define it.
+
+  Scenario (illustrative, holds inflow constant at the 2025 rate):
+    cut average stay 251 -> 225 days: sheltered households on a given night 2358 -> 2,114 (-10.4%)
+    cut average stay 251 -> 200 days: sheltered households on a given night 2358 -> 1,879 (-20.3%)
+    cut average stay 251 -> 180 days: sheltered households on a given night 2358 -> 1,691 (-28.3%)
+
+==============================================================================
+4. Rent, SSI and wage checks
+==============================================================================
+  Plan's $2,586 = HUD FY2025 2BR FMR for Nassau-Suffolk exactly: True
+  (FMR is a 40th-percentile gross rent for standard-quality units, not a median or average.)
+  2BR FY2025 $2,586 -> FY2026 $2,747: +6.2%
+  2BR FY2026 $2,747 -> FY2027 $2,689: -2.1%
+  SSI 2024 NY living alone: $943 + $87 = $1,030
+  SSI 2025 NY living alone: $967 + $87 = $1,054
+  SSI 2026 NY living alone: $994 + $87 = $1,081
+  Plan's $1,009 ('average SSI payment in 2024') matches none of these; the 2024 maximum was $1,030.
+  FY2026 0BR FMR $1,992 = 184.3% of 2026 SSI ($1,081); 30%-of-income rent on SSI = $324
+  FY2026 1BR FMR $2,379 = 220.1% of 2026 SSI ($1,081); 30%-of-income rent on SSI = $324
+  FY2027 0BR FMR $1,964 = 181.7% of 2026 SSI ($1,081); 30%-of-income rent on SSI = $324
+  FY2027 1BR FMR $2,285 = 211.4% of 2026 SSI ($1,081); 30%-of-income rent on SSI = $324
+  A one-person SSI household is better compared to a studio/1BR than the 2BR the plan uses.
+
+  LI minimum wage 2026 $17.00/hr -> full-time $35,360/yr; affordable rent $884/mo
+  Income needed for FY2027 2BR FMR $2,689 at 30%: $107,560/yr = $51.71/hr full-time
+  Minimum-wage hours/week needed: 122
+
+==============================================================================
+5. Housing cost burden, ACS 2024 1-year (B25070 renters, B25091 owners)
+==============================================================================
+  Nassau   renters burdened 42,188/80,294 = 52.5% (severe 50%+: 25.1%); owners 32.9%; all households 36.4%
+  Suffolk  renters burdened 48,248/80,619 = 59.8% (severe 50%+: 33.6%); owners 33.4%; all households 37.7%
+  Long Island renters burdened: 56.2% (severe: 29.4%)
+  Long Island owners burdened:  33.2%
+  Long Island ALL households:   37.1%
+  -> '55%' matches renter households (~56%), not 'Long Islanders' overall (~37%).
+  (1-year ACS estimates carry margins of error; the 5-year table is steadier for planning.)
+
+==============================================================================
+6. Community input
+==============================================================================
+  Listening sessions: 12 (plan says twelve) -> OK
+  Survey responses (draft table): total 102 (final text says 102) -> OK
+    Librarians/library staff              40   39.2%
+    Homeless response system partners     33   32.4%
+    Healthcare partners                   16   15.7%
+    McKinney-Vento liaisons/education      9    8.8%
+    Local elected officials                2    2.0%
+    Philanthropic partners                 1    1.0%
+    Local law enforcement                  1    1.0%
+  Library + homeless-system partners = 71.6% of responses; elected officials + philanthropy + law enforcement = 4 responses (3.9%)
+  No survey of landlords, PHAs, employers or DSS staff is listed.
+
+==============================================================================
+7. Action-step register (appendix/C-action-step-register.csv)
+==============================================================================
+  Rows 81 = 68 steps + 13 sub-bullets
+    Goal 1: Year One  4  Years 2-5  7
+    Goal 2: Year One  3  Years 2-5  7
+    Goal 3: Year One  4  Years 2-5  8
+    Goal 4: Year One  4  Years 2-5  8
+    Goal 5: Year One  4  Years 2-5  8
+    Goal 6: Year One  4  Years 2-5  7
+  Year One steps: 23; Years 2-5: 45
+  control             CoC 25 (36.8%), partner 33 (48.5%), policy 10 (14.7%)
+  measure             deliverable 35 (51.5%), directional 30 (44.1%), target 3 (4.4%)
+  new_funding_needed  N 40 (58.8%), Y 28 (41.2%)
+  Year One only:      control CoC 13, partner 9, policy 1 | measure deliverable 16, directional 6, target 1
+
+  Themes appearing under more than one goal (rows incl. sub-bullets):
+    employment-income        12 rows across goals 3,4,5
+    shelter-fees-savings     10 rows across goals 1,3,4
+    health-behavioral        10 rows across goals 1,3,5
+    prevention-diversion      9 rows across goals 1,2,4,5,6
+    funding                   9 rows across goals 1,2,6
+    data-analysis             7 rows across goals 1,2,3,4
+    communications-campaign   7 rows across goals 1,2,3,4,6
+    low-barrier-access        7 rows across goals 1,3,5
+    landlords-units           7 rows across goals 2,3,4,6
+    DSS                       7 rows across goals 3,6
+    lived-experience-peers    6 rows across goals 2,3,4,5
+    advocacy                  6 rows across goals 2,3,4
+    PHA-vouchers              4 rows across goals 1,2,3
+    standards-training        4 rows across goals 1,3,5
+    libraries                 4 rows across goals 1,2,6
+    zoning-development        4 rows across goals 2,6
+    hours-access              3 rows across goals 1,2,3
+    transportation            3 rows across goals 1,4,5
+    discharge-planning        3 rows across goals 2,5
+    older-adults-55plus       3 rows across goals 5,6
+    system-map                2 rows across goals 1,5
+    youth                     2 rows across goals 2,5
+    legal-services            2 rows across goals 4,5
+
+  Rows flagged as duplicating another row: 10 -> G2-Y1-H, G3-Y1-02, G3-Y25-01a, G3-Y25-01b, G3-Y25-08, G4-Y1-02, G5-Y1-01, G5-Y1-02, G6-Y25-02, G6-Y25-03
+
+  Proposed initiatives: 13; every row mapped: True
+    1. Shelter income, fees and savings reform              10 rows
+    2. One standards-and-training framework                  4 rows
+    3. One system map and front-door information             5 rows
+    4. Health, discharge and triage                          5 rows
+    5. Low-barrier crisis capacity and access               11 rows
+    6. Older adults (55+)                                    2 rows
+    7. Prevention and eviction diversion                     6 rows
+    8. Landlords, units and exits to housing                 8 rows
+    9. Income, employment and benefits                       9 rows
+    10. Housing supply and policy advocacy                   9 rows
+    11. Lived experience and peer workforce                  5 rows
+    12. One communications strategy                          4 rows
+    13. Funding diversification and federal contingency      3 rows
+
+  Year One 'Housing'/'Education' labels (the plan's two cross-cutting themes):
+    G1-Y1-H  Quantify the need for more affordable housing on Long Island through a review of current...
+    G1-Y1-E  Develop an information campaign and distribute materials to raise awareness of housing a...
+    G2-Y1-H  Create a regional discharge planning guide in partnership with hospitals, foster care, a...
+    G2-Y1-E  Develop an education campaign to foster community compassion and political will, thereby...
+    G3-Y1-H  Create CoC Community Standards and universal training for Case Managers on housing-focus...
+    G3-Y1-E  Simplify the information and access steps to enter emergency shelter, providing all elig...
+    G4-Y1-H  Increase access to formal workforce development programs that teach marketable skills fo...
+    G4-Y1-E  Co-create an employment program messaging campaign with individuals experiencing homeles...
+    G5-Y1-H  Establish a working group to explore the needs of people experiencing homelessness with ...
+    G5-Y1-E  Ensure every CoC-funded housing program has an SSI/SSDI, Outreach, Access and Recovery (...
+    G6-Y1-H  Create a flexible funding pool for landlord incentive payments....
+    G6-Y1-E  Launch a tenant rights training to help prevent people from becoming homeless....
+
+Done.
