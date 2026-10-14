@@ -1,0 +1,66 @@
+{
+  "_comment": "Two plausible shapes of SocialCrawl's free catalog responses (exact key names are [verify]). Test-only.",
+  "shape_a": {
+    "endpoints_reddit": {
+      "success": true,
+      "data": {
+        "ranking": "keyword",
+        "endpoints": [
+          {"id": "reddit/search", "path": "/v1/reddit/search", "method": "GET", "platform": "reddit", "credits": 1, "summary": "Search Reddit posts", "params": {"required": ["query"], "optional": ["sort", "timeframe", "after"]}},
+          {"id": "reddit/search/comments", "path": "/v1/reddit/search/comments", "method": "GET", "platform": "reddit", "credits": 1, "summary": "Search Reddit comments"},
+          {"id": "reddit/subreddits/search", "path": "/v1/reddit/subreddits/search", "method": "GET", "platform": "reddit", "credits": 1, "summary": "Find subreddits by topic"},
+          {"id": "reddit/omni-search", "path": "/v1/reddit/omni-search", "method": "GET", "platform": "reddit", "credits": 5, "summary": "Reddit VoC sweep"},
+          {"id": "reddit/subreddit", "path": "/v1/reddit/subreddit", "method": "GET", "platform": "reddit", "credits": 1, "summary": "List Reddit subreddit posts"},
+          {"id": "reddit/subreddit/details", "path": "/v1/reddit/subreddit/details", "method": "GET", "platform": "reddit", "credits": 1, "summary": "Get Reddit subreddit details"},
+          {"id": "reddit/subreddit/search", "path": "/v1/reddit/subreddit/search", "method": "GET", "platform": "reddit", "credits": 1, "summary": "Search within a subreddit"},
+          {"id": "reddit/post/comments", "path": "/v1/reddit/post/comments", "method": "GET", "platform": "reddit", "credits": 5, "summary": "List Reddit post comments"},
+          {"id": "reddit/profile", "path": "/v1/reddit/profile", "method": "GET", "platform": "reddit", "credits": 1, "summary": "Get a Reddit user profile"}
+        ]
+      }
+    },
+    "guides": {
+      "reddit/search": {"success": true, "data": {"id": "reddit/search", "path": "/v1/reddit/search", "method": "GET", "credits": "1-34 (metered)", "params": {
+        "required": [{"name": "query", "type": "string", "description": "Search words or a phrase"}],
+        "optional": [
+          {"name": "sort", "type": "string", "enum": ["relevance", "new", "top", "comment_count"], "description": "Sort by"},
+          {"name": "timeframe", "type": "string", "enum": ["all", "day", "week", "month", "year"]},
+          {"name": "after", "type": "string"},
+          {"name": "judgments", "type": "string", "enum": ["on", "off"]}
+        ],
+        "featured": [{"name": "trim", "reason": "lighter payload"}]
+      }}},
+      "reddit/subreddit": {"success": true, "data": {"id": "reddit/subreddit", "path": "/v1/reddit/subreddit", "credits": 1, "params": {
+        "required": [{"name": "subreddit", "type": "string"}],
+        "optional": [{"name": "sort", "enum": ["best", "hot", "new", "top", "rising"]}, {"name": "timeframe", "enum": ["all", "day", "week", "month", "year"]}, {"name": "after"}]
+      }}},
+      "reddit/subreddit/search": {"success": true, "data": {"id": "reddit/subreddit/search", "path": "/v1/reddit/subreddit/search", "credits": 1, "params": {
+        "required": [{"name": "subreddit"}],
+        "optional": [{"name": "query"}, {"name": "sort", "enum": ["relevance", "hot", "top", "new", "comments"]}, {"name": "timeframe", "enum": ["all", "year", "month", "week", "day", "hour"]}, {"name": "cursor"}]
+      }}},
+      "reddit/post/comments": {"success": true, "data": {"id": "reddit/post/comments", "path": "/v1/reddit/post/comments", "credits": "5-9 (metered)", "params": {
+        "required": [{"name": "url", "description": "Full URL of the Reddit post"}],
+        "optional": [{"name": "cursor"}, {"name": "trim", "type": "boolean"}]
+      }}}
+    }
+  },
+  "shape_b": {
+    "endpoints_twitter": {
+      "success": true,
+      "data": {
+        "items": [
+          {"endpoint_id": "twitter/profile", "endpoint": "/v1/twitter/profile", "cost": "1 credit", "description": "Get Twitter user profile", "parameters": [{"name": "handle", "required": true}]},
+          {"endpoint_id": "twitter/ai-search", "endpoint": "/v1/twitter/ai-search", "cost": "5 credits", "description": "AI-powered X search"},
+          {"endpoint_id": "twitter/search/users", "endpoint": "/v1/twitter/search/users", "cost": "1 credit", "description": "Search Twitter users"},
+          {"endpoint_id": "twitter/search/tweets", "endpoint": "/v1/twitter/search/tweets", "cost": "1 credit", "description": "Search Twitter tweets"}
+        ]
+      }
+    },
+    "guides": {
+      "twitter/search/tweets": {"success": true, "data": {"endpoint": {"endpoint_id": "twitter/search/tweets", "endpoint": "/v1/twitter/search/tweets", "credit_cost": 1, "parameters": {
+        "query": {"required": true, "type": "string", "description": "Search query"},
+        "search_type": {"required": false, "type": "string", "enum": ["Top", "Latest"]},
+        "cursor": {"required": false, "type": "string"}
+      }}}}
+    }
+  }
+}

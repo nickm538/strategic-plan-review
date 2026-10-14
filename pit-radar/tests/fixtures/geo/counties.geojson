@@ -1,0 +1,76 @@
+{
+ "type": "FeatureCollection",
+ "_comment": "SYNTHETIC test-only rectangles; not real county boundaries",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "county": "Nassau",
+    "geoid": "36059",
+    "synthetic": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -73.75,
+       40.55
+      ],
+      [
+       -73.45,
+       40.55
+      ],
+      [
+       -73.45,
+       40.95
+      ],
+      [
+       -73.75,
+       40.95
+      ],
+      [
+       -73.75,
+       40.55
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "county": "Suffolk",
+    "geoid": "36103",
+    "synthetic": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -73.45,
+       40.6
+      ],
+      [
+       -71.85,
+       40.6
+      ],
+      [
+       -71.85,
+       41.3
+      ],
+      [
+       -73.45,
+       41.3
+      ],
+      [
+       -73.45,
+       40.6
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

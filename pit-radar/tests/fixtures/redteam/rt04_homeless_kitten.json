@@ -1,0 +1,47 @@
+{
+  "_note": "Synthetic test input (docs/10 §3). 'verdict' is what a model could return; 'geo' is a GeoResult-like stand-in (coordinates are deliberately not real: the decision table only reads presence, precision, county, in_geofence and outside_reason). The prefilter drops this first (hard_exclusions.animal); this checks the next layer too.",
+  "id": "rt04_homeless_kitten",
+  "docs10_case": "Adopt this homeless kitten in Massapequa!",
+  "docs10_expected": "discard at prefilter (animal)",
+  "stage": "prefilter_defense_in_depth",
+  "post_text": "Adopt this homeless kitten in Massapequa! Litter trained and very sweet.",
+  "published_age_hours": 4,
+  "platform": "reddit",
+  "source_scope": "general",
+  "subreddit": null,
+  "verdict": {
+    "relevance": "not_relevant",
+    "signal_type": "none",
+    "not_relevant_reason": "animal",
+    "in_long_island_counties": "yes",
+    "area_basis": "names Massapequa",
+    "time_reference": "current",
+    "location": {
+      "mentioned": false,
+      "location_text": "",
+      "location_kind": "none",
+      "is_private_residence": false
+    },
+    "people_count_estimate": -1,
+    "flags": {
+      "possible_minors": false,
+      "medical_concern": false,
+      "weather_exposure": false,
+      "safety_concern": false
+    },
+    "evidence_quotes": [],
+    "neutral_summary": "",
+    "decision_basis": "The post is about an animal.",
+    "confidence": 0.01
+  },
+  "geo": null,
+  "self_report_town": null,
+  "self_report_county": null,
+  "expected": {
+    "store": false,
+    "status": null,
+    "drop_reason": "not_relevant:animal",
+    "review_reason": null,
+    "mapped": false
+  }
+}

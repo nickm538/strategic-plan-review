@@ -275,6 +275,8 @@ class VerificationResult:
     is_private_residence: bool      # V8
     checks: list[CheckResult] = field(default_factory=list)
     review_reasons: list[str] = field(default_factory=list)  # reasons that force needs_human_review
+    location_text: Optional[str] = None  # V3-verified span safe to store: None if V3 failed or the span holds a street
+                                        # address/plate/handle/phone/drop term; gendered words masked
 
 
 @dataclass

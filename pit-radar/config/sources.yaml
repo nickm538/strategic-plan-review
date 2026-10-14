@@ -35,52 +35,53 @@ socialcrawl:
   #   1. call GET /v1/utility/endpoints?search=<discovery_search> for each platform
   #   2. prefer `pinned_endpoint` if it still exists, else the cheapest matching endpoint
   #   3. cache GET /v1/utility/endpoint?id=<id> (parameters, cost, paging) and validate every call
-  # After the first discovery run, an admin pins the chosen ids here. Until then all are null.
+  # Pinned ids below come from SocialCrawl's published docs index (read Oct 2026). Discovery still checks each
+  # one against the live catalog at startup and falls back to the cheapest matching endpoint if it is gone.
   capabilities:
     keyword_search:
       description: Search public posts by keyword, newest first when a sort or time parameter exists
       discovery_search: ["search", "search posts", "keyword"]
       prefer_params: { sort: [latest, recent, new, date], time: [day, week, month] }
       platforms:
-        reddit:    { enabled: true,  pinned_endpoint: null, verify: true }
-        twitter:   { enabled: true,  pinned_endpoint: null, verify: true }
-        threads:   { enabled: true,  pinned_endpoint: null, verify: true }
-        bluesky:   { enabled: true,  pinned_endpoint: null, verify: true }
-        tiktok:    { enabled: true,  pinned_endpoint: null, verify: true }
-        youtube:   { enabled: true,  pinned_endpoint: null, verify: true }
-        facebook:  { enabled: true,  pinned_endpoint: null, verify: true, note: "public pages and posts only; what Facebook search covers is [verify]" }
+        reddit:    { enabled: true,  pinned_endpoint: reddit/search, verify: true }
+        twitter:   { enabled: true,  pinned_endpoint: twitter/search/tweets, verify: true }
+        threads:   { enabled: true,  pinned_endpoint: threads/search, verify: true }
+        bluesky:   { enabled: true,  pinned_endpoint: bluesky/search, verify: true }
+        tiktok:    { enabled: true,  pinned_endpoint: tiktok/search, verify: true }
+        youtube:   { enabled: true,  pinned_endpoint: youtube/search, verify: true }
+        facebook:  { enabled: true,  pinned_endpoint: facebook/search/posts, verify: true, note: "public pages and posts only; what Facebook search covers is [verify]" }
         instagram: { enabled: false, pinned_endpoint: null, verify: true, note: "enable only if keyword search exists and yields text captions" }
 
     subreddit_new:
       description: Newest posts in one subreddit (cheapest high-yield source for Long Island)
       discovery_search: ["subreddit posts", "subreddit new", "subreddit"]
       platforms:
-        reddit: { enabled: true, pinned_endpoint: null, verify: true }
+        reddit: { enabled: true, pinned_endpoint: reddit/subreddit, verify: true }
 
     subreddit_search:
       description: Keyword search inside one subreddit, recency-sorted if possible
       discovery_search: ["subreddit search", "search subreddit"]
       platforms:
-        reddit: { enabled: true, pinned_endpoint: null, verify: true }
+        reddit: { enabled: true, pinned_endpoint: reddit/subreddit/search, verify: true }
 
     post_comments:
       description: Comments on a thread that passed the prefilter; each comment becomes its own item
       discovery_search: ["post comments", "comments"]
       platforms:
-        reddit: { enabled: true, pinned_endpoint: null, verify: true }
+        reddit: { enabled: true, pinned_endpoint: reddit/post/comments, verify: true }
 
     hashtag_posts:
       description: Posts for a hashtag. Captions only; never fetch media (R1)
       discovery_search: ["hashtag", "hashtag posts"]
       platforms:
-        instagram: { enabled: false, pinned_endpoint: null, verify: true }
-        tiktok:    { enabled: false, pinned_endpoint: null, verify: true }
+        instagram: { enabled: false, pinned_endpoint: instagram/search/hashtag, verify: true }
+        tiktok:    { enabled: false, pinned_endpoint: tiktok/search/hashtag, verify: true }
 
     news_search:
       description: Google News search
       discovery_search: ["news", "google news search"]
       platforms:
-        google_news: { enabled: true, pinned_endpoint: null, verify: true }
+        google_news: { enabled: true, pinned_endpoint: google_news/search, verify: true }
 
 # ---------------------------------------------------------------------------
 # Subreddits

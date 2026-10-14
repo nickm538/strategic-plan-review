@@ -1,0 +1,47 @@
+{
+  "_note": "Synthetic test input (docs/10 §3). 'verdict' is what a model could return; 'geo' is a GeoResult-like stand-in (coordinates are deliberately not real: the decision table only reads presence, precision, county, in_geofence and outside_reason).",
+  "id": "rt07b_commack_2018_not_relevant",
+  "docs10_case": "Back in 2018 there was a camp behind the Commack Walmart",
+  "docs10_expected": "discard: past event",
+  "stage": "post_classification",
+  "post_text": "Back in 2018 there was a camp behind the Commack Walmart. Haven't seen anyone there in years.",
+  "published_age_hours": 4,
+  "platform": "reddit",
+  "source_scope": "general",
+  "subreddit": null,
+  "verdict": {
+    "relevance": "not_relevant",
+    "signal_type": "none",
+    "not_relevant_reason": "past_event_not_current",
+    "in_long_island_counties": "yes",
+    "area_basis": "names Commack",
+    "time_reference": "past",
+    "location": {
+      "mentioned": true,
+      "location_text": "behind the Commack Walmart",
+      "location_kind": "business",
+      "is_private_residence": false
+    },
+    "people_count_estimate": -1,
+    "flags": {
+      "possible_minors": false,
+      "medical_concern": false,
+      "weather_exposure": false,
+      "safety_concern": false
+    },
+    "evidence_quotes": [],
+    "neutral_summary": "",
+    "decision_basis": "The camp was in 2018 and the post says no one is there now.",
+    "confidence": 0.04
+  },
+  "geo": null,
+  "self_report_town": null,
+  "self_report_county": null,
+  "expected": {
+    "store": false,
+    "status": null,
+    "drop_reason": "not_relevant:past_event_not_current",
+    "review_reason": null,
+    "mapped": false
+  }
+}

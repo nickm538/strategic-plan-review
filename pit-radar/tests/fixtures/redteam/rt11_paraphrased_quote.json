@@ -1,0 +1,64 @@
+{
+  "_note": "Synthetic test input (docs/10 §3). 'verdict' is what a model could return; 'geo' is a GeoResult-like stand-in (coordinates are deliberately not real: the decision table only reads presence, precision, county, in_geofence and outside_reason).",
+  "id": "rt11_paraphrased_quote",
+  "docs10_case": "A real-looking sighting whose model quote is paraphrased",
+  "docs10_expected": "quote dropped -> needs_human_review",
+  "stage": "post_classification",
+  "post_text": "There's been a tent set up behind the Bay Shore library for like two weeks now and someone is living in it.",
+  "published_age_hours": 4,
+  "platform": "reddit",
+  "source_scope": "li_scoped",
+  "subreddit": "longisland",
+  "verdict": {
+    "relevance": "relevant",
+    "signal_type": "encampment",
+    "not_relevant_reason": "none",
+    "in_long_island_counties": "yes",
+    "area_basis": "names Bay Shore",
+    "time_reference": "ongoing",
+    "location": {
+      "mentioned": true,
+      "location_text": "behind the Bay Shore library",
+      "location_kind": "named_place",
+      "is_private_residence": false
+    },
+    "people_count_estimate": 1,
+    "flags": {
+      "possible_minors": false,
+      "medical_concern": false,
+      "weather_exposure": false,
+      "safety_concern": false
+    },
+    "evidence_quotes": [
+      {
+        "text": "a tent has been behind the Bay Shore library for two weeks",
+        "supports": "situation"
+      }
+    ],
+    "neutral_summary": "Post reports a tent behind the Bay Shore library for about two weeks.",
+    "decision_basis": "Post says a tent has been behind the Bay Shore library for weeks.",
+    "confidence": 0.9
+  },
+  "geo": {
+    "lat": 1.0,
+    "lon": -1.0,
+    "county": "Suffolk",
+    "precision": "public_place",
+    "place_id": 103,
+    "place_label": "Bay Shore library",
+    "town": "Bay Shore",
+    "source": "gazetteer",
+    "in_geofence": true,
+    "outside_reason": null
+  },
+  "self_report_town": null,
+  "self_report_county": null,
+  "expected": {
+    "store": true,
+    "status": "needs_human_review",
+    "drop_reason": null,
+    "review_reason": "no_verified_quote",
+    "mapped": false,
+    "quotes_kept": 0
+  }
+}

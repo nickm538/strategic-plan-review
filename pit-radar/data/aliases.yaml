@@ -1,0 +1,52 @@
+# Hand-curated spelling variants for Long Island place names (docs/06 §2.2). Reviewed in code review.
+#
+# Each group lists spellings that mean the same place. The FIRST entry of every group is the spelling
+# the U.S. Census Bureau uses (TIGER BASENAME). A group attaches to every gazetteer record whose own
+# name equals any member (villages, CDPs, towns and same-named LIRR stations), and the other members
+# become that record's aliases, so the mapping works both ways. Groups that match no record are ignored.
+#
+# Names only: no coordinates here, ever. Coordinates come from the fetched datasets.
+# Generated automatically, so do not list them here: St./Saint/St, Mt./Mount/Mt, Pt./Port/Pt,
+# N./S./E./W. for North/South/East/West, "Town of X", "City of X", "Village of X", "X Village",
+# and for LIRR stations "X station", "X LIRR", "X train station", "X LIRR station".
+# An exact Census name always wins over an alias: with both groups below, "Westhampton" still means the
+# Westhampton CDP and "Westhampton Beach" the village.
+
+groups:
+  # Nassau County
+  - [Rockville Centre, Rockville Center, RVC]
+  - [Sea Cliff, Seacliff]
+  - [Manorhaven, Manor Haven]
+  - [Kings Point, King's Point]
+  - [Point Lookout, Pt. Lookout, Pt Lookout]
+  - [Lido Beach, Lido]
+  - [Great Neck Plaza, GN Plaza]
+  - [Franklin Square, Franklin Sq]
+
+  # Suffolk County
+  - [Bay Shore, Bayshore]
+  - [St. James, Saint James, St James]
+  - [Mount Sinai, Mt. Sinai, Mt Sinai]
+  - [Port Jefferson, Port Jeff]
+  - [Port Jefferson Station, Port Jeff Station, PJ Station]
+  - [Ronkonkoma, Ronk]
+  - [Lake Ronkonkoma, Lake Ronk]
+  - [Huntington Station, Huntington Sta]
+  - [Westhampton Beach, Westhampton]
+  - [Westhampton, West Hampton]
+  - [Southampton, South Hampton]
+  - [East Hampton, Easthampton]
+  - [Bridgehampton, Bridge Hampton]
+  - [Sag Harbor, Sag Harbour]
+  - [Hauppauge, Hauppague]
+  - [Remsenburg-Speonk, Remsenburg, Speonk]
+  - [Stony Brook University, SBU]
+  - [Center Moriches, Centre Moriches]
+  - [Centerport, Centreport]
+  - [Brightwaters, Bright Waters]
+  - [Eatons Neck, Eaton's Neck]
+  - [Fishers Island, Fisher's Island, Fisher Island]
+  - [Kings Park, King's Park]
+  - [East Northport, E Northport]
+  - [West Babylon, W Babylon]
+  - [North Babylon, N Babylon]

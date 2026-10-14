@@ -1,0 +1,52 @@
+{
+  "_note": "Synthetic test input (docs/10 §3). 'verdict' is what a model could return; 'geo' is a GeoResult-like stand-in (coordinates are deliberately not real: the decision table only reads presence, precision, county, in_geofence and outside_reason).",
+  "id": "rt08_self_report_hempstead",
+  "docs10_case": "I'm homeless in Hempstead, sleeping in my car",
+  "docs10_expected": "self_report: town-level list, no pin",
+  "stage": "post_classification",
+  "post_text": "I'm homeless in Hempstead, sleeping in my car since last week. Does anyone know where I can shower?",
+  "published_age_hours": 4,
+  "platform": "reddit",
+  "source_scope": "li_scoped",
+  "subreddit": "longisland",
+  "verdict": {
+    "relevance": "relevant",
+    "signal_type": "self_report",
+    "not_relevant_reason": "none",
+    "in_long_island_counties": "yes",
+    "area_basis": "names Hempstead on an LI subreddit",
+    "time_reference": "current",
+    "location": {
+      "mentioned": true,
+      "location_text": "Hempstead",
+      "location_kind": "town_only",
+      "is_private_residence": false
+    },
+    "people_count_estimate": 1,
+    "flags": {
+      "possible_minors": false,
+      "medical_concern": false,
+      "weather_exposure": false,
+      "safety_concern": false
+    },
+    "evidence_quotes": [
+      {
+        "text": "I'm homeless in Hempstead, sleeping in my car",
+        "supports": "situation"
+      }
+    ],
+    "neutral_summary": "Poster says they are currently homeless in Hempstead and sleeping in a car.",
+    "decision_basis": "Post is a current self-report naming Hempstead.",
+    "confidence": 0.9
+  },
+  "geo": null,
+  "self_report_town": "Hempstead",
+  "self_report_county": "Nassau",
+  "expected": {
+    "store": true,
+    "status": "self_report",
+    "drop_reason": null,
+    "review_reason": null,
+    "mapped": false
+  }
+}

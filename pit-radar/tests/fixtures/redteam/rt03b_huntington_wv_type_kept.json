@@ -1,0 +1,52 @@
+{
+  "_note": "Synthetic test input (docs/10 §3). 'verdict' is what a model could return; 'geo' is a GeoResult-like stand-in (coordinates are deliberately not real: the decision table only reads presence, precision, county, in_geofence and outside_reason). Model keeps a type but says past and out of area; either rule discards it (past is checked first).",
+  "id": "rt03b_huntington_wv_type_kept",
+  "docs10_case": "Huntington, WV homeless camp cleared",
+  "docs10_expected": "discard: outside area",
+  "stage": "post_classification",
+  "post_text": "Huntington, WV homeless camp cleared by city crews on Tuesday.",
+  "published_age_hours": 4,
+  "platform": "news",
+  "source_scope": "general",
+  "subreddit": null,
+  "verdict": {
+    "relevance": "relevant",
+    "signal_type": "encampment",
+    "not_relevant_reason": "none",
+    "in_long_island_counties": "no",
+    "area_basis": "Huntington, West Virginia",
+    "time_reference": "past",
+    "location": {
+      "mentioned": true,
+      "location_text": "Huntington, WV",
+      "location_kind": "town_only",
+      "is_private_residence": false
+    },
+    "people_count_estimate": -1,
+    "flags": {
+      "possible_minors": false,
+      "medical_concern": false,
+      "weather_exposure": false,
+      "safety_concern": false
+    },
+    "evidence_quotes": [
+      {
+        "text": "Huntington, WV homeless camp cleared",
+        "supports": "situation"
+      }
+    ],
+    "neutral_summary": "Post reports a cleared camp in Huntington, West Virginia.",
+    "decision_basis": "The camp was in West Virginia and was cleared.",
+    "confidence": 0.55
+  },
+  "geo": null,
+  "self_report_town": null,
+  "self_report_county": null,
+  "expected": {
+    "store": false,
+    "status": null,
+    "drop_reason": "past_event",
+    "review_reason": null,
+    "mapped": false
+  }
+}

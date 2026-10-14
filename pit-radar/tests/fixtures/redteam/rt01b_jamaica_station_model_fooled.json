@@ -1,0 +1,63 @@
+{
+  "_note": "Synthetic test input (docs/10 §3). 'verdict' is what a model could return; 'geo' is a GeoResult-like stand-in (coordinates are deliberately not real: the decision table only reads presence, precision, county, in_geofence and outside_reason). Model wrongly says in area; the geocoder refuses the Queens match, so V4 fails and staff decide.",
+  "id": "rt01b_jamaica_station_model_fooled",
+  "docs10_case": "Homeless guy sleeping at Jamaica station again",
+  "docs10_expected": "discard: outside area",
+  "stage": "post_classification",
+  "post_text": "Homeless guy sleeping at Jamaica station again. Same spot on the LIRR platform as last week.",
+  "published_age_hours": 4,
+  "platform": "reddit",
+  "source_scope": "general",
+  "subreddit": null,
+  "verdict": {
+    "relevance": "relevant",
+    "signal_type": "individual_unsheltered",
+    "not_relevant_reason": "none",
+    "in_long_island_counties": "yes",
+    "area_basis": "mentions the LIRR",
+    "time_reference": "current",
+    "location": {
+      "mentioned": true,
+      "location_text": "Jamaica station",
+      "location_kind": "named_place",
+      "is_private_residence": false
+    },
+    "people_count_estimate": -1,
+    "flags": {
+      "possible_minors": false,
+      "medical_concern": false,
+      "weather_exposure": false,
+      "safety_concern": false
+    },
+    "evidence_quotes": [
+      {
+        "text": "Homeless guy sleeping at Jamaica station again",
+        "supports": "situation"
+      }
+    ],
+    "neutral_summary": "Post reports a person sleeping at Jamaica station.",
+    "decision_basis": "Post says a person sleeps at Jamaica station.",
+    "confidence": 0.8
+  },
+  "geo": {
+    "lat": null,
+    "lon": null,
+    "county": null,
+    "precision": null,
+    "place_id": null,
+    "place_label": null,
+    "town": null,
+    "source": "none",
+    "in_geofence": false,
+    "outside_reason": "nominatim county mismatch"
+  },
+  "self_report_town": null,
+  "self_report_county": null,
+  "expected": {
+    "store": true,
+    "status": "needs_human_review",
+    "drop_reason": null,
+    "review_reason": "geofence_mismatch",
+    "mapped": false
+  }
+}

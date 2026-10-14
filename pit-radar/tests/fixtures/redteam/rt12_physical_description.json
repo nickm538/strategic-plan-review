@@ -1,0 +1,78 @@
+{
+  "_note": "Synthetic test input (docs/10 §3). 'verdict' is what a model could return; 'geo' is a GeoResult-like stand-in (coordinates are deliberately not real: the decision table only reads presence, precision, county, in_geofence and outside_reason).",
+  "id": "rt12_physical_description",
+  "docs10_case": "A sighting with a physical description of the person",
+  "docs10_expected": "stored quote/summary contain no description (V2/V6)",
+  "stage": "post_classification",
+  "post_text": "An older man in a red hoodie has been sleeping on the bench at the Hicksville LIRR station every night this week.",
+  "published_age_hours": 4,
+  "platform": "reddit",
+  "source_scope": "li_scoped",
+  "subreddit": "longisland",
+  "verdict": {
+    "relevance": "relevant",
+    "signal_type": "individual_unsheltered",
+    "not_relevant_reason": "none",
+    "in_long_island_counties": "yes",
+    "area_basis": "names the Hicksville LIRR station",
+    "time_reference": "ongoing",
+    "location": {
+      "mentioned": true,
+      "location_text": "the Hicksville LIRR station",
+      "location_kind": "named_place",
+      "is_private_residence": false
+    },
+    "people_count_estimate": 1,
+    "flags": {
+      "possible_minors": false,
+      "medical_concern": false,
+      "weather_exposure": false,
+      "safety_concern": false
+    },
+    "evidence_quotes": [
+      {
+        "text": "An older man in a red hoodie has been sleeping on the bench",
+        "supports": "situation"
+      },
+      {
+        "text": "sleeping on the bench at the Hicksville LIRR station every night this week",
+        "supports": "location"
+      }
+    ],
+    "neutral_summary": "An older man in a red hoodie sleeps on a bench at the Hicksville LIRR station nightly.",
+    "decision_basis": "Post says a man has slept at the Hicksville station every night this week.",
+    "confidence": 0.88
+  },
+  "geo": {
+    "lat": 1.0,
+    "lon": -1.0,
+    "county": "Nassau",
+    "precision": "public_place",
+    "place_id": 104,
+    "place_label": "Hicksville LIRR station",
+    "town": "Hicksville",
+    "source": "gazetteer",
+    "in_geofence": true,
+    "outside_reason": null
+  },
+  "self_report_town": null,
+  "self_report_county": null,
+  "expected": {
+    "store": true,
+    "status": "ai_verified",
+    "drop_reason": null,
+    "review_reason": null,
+    "mapped": true,
+    "precision": "public_place",
+    "evidence_redacted": true,
+    "quotes_kept": 1,
+    "summary": "Person(s) sleeping outside reported (ongoing).",
+    "decision_basis": "Summary withheld by privacy check.",
+    "forbidden_in_stored": [
+      "older",
+      "hoodie",
+      "red",
+      "man"
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "_note": "Synthetic test input (docs/10 §3). 'verdict' is what a model could return; 'geo' is a GeoResult-like stand-in (coordinates are deliberately not real: the decision table only reads presence, precision, county, in_geofence and outside_reason).",
+  "id": "rt02_lic_encampment",
+  "docs10_case": "Long Island City encampment under the bridge",
+  "docs10_expected": "discard: outside area",
+  "stage": "post_classification",
+  "post_text": "Long Island City encampment under the bridge is getting bigger, at least six tents now.",
+  "published_age_hours": 4,
+  "platform": "reddit",
+  "source_scope": "general",
+  "subreddit": null,
+  "verdict": {
+    "relevance": "not_relevant",
+    "signal_type": "none",
+    "not_relevant_reason": "outside_nassau_suffolk",
+    "in_long_island_counties": "no",
+    "area_basis": "Long Island City is in Queens",
+    "time_reference": "current",
+    "location": {
+      "mentioned": true,
+      "location_text": "Long Island City",
+      "location_kind": "town_only",
+      "is_private_residence": false
+    },
+    "people_count_estimate": -1,
+    "flags": {
+      "possible_minors": false,
+      "medical_concern": false,
+      "weather_exposure": false,
+      "safety_concern": false
+    },
+    "evidence_quotes": [],
+    "neutral_summary": "",
+    "decision_basis": "Long Island City is in Queens, not Nassau or Suffolk.",
+    "confidence": 0.02
+  },
+  "geo": null,
+  "self_report_town": null,
+  "self_report_county": null,
+  "expected": {
+    "store": false,
+    "status": null,
+    "drop_reason": "not_relevant:outside_nassau_suffolk",
+    "review_reason": null,
+    "mapped": false
+  }
+}

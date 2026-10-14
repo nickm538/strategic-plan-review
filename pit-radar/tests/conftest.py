@@ -12,8 +12,9 @@ import pytest
 os.environ.setdefault("APP_ENV", "test")
 os.environ.setdefault("SESSION_SECRET", "test-session-secret-0123456789abcdef0123456789")
 os.environ.setdefault("COOKIE_SECURE", "false")
-for _k in ("SOCIALCRAWL_API_KEY", "EXA_API_KEY", "FIRECRAWL_API_KEY", "ANTHROPIC_API_KEY"):
-    os.environ.pop(_k, None)
+if os.environ.get("RUN_LIVE") != "1":  # live tests (marked `live`) keep real keys; everything else runs keyless
+    for _k in ("SOCIALCRAWL_API_KEY", "EXA_API_KEY", "FIRECRAWL_API_KEY", "ANTHROPIC_API_KEY"):
+        os.environ.pop(_k, None)
 
 FIXTURES = Path(__file__).parent / "fixtures"
 NOW = dt.datetime(2026, 10, 14, 16, 0, tzinfo=dt.timezone.utc)

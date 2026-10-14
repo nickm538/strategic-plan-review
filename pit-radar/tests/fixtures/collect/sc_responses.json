@@ -1,0 +1,107 @@
+{
+  "_comment": "Synthetic SocialCrawl envelopes for tests only (unified schema per socialcrawl.dev/docs/schema). No real people or handles; author fields are present ON PURPOSE to prove they are dropped.",
+  "reddit_search_ok": {
+    "success": true,
+    "platform": "reddit",
+    "endpoint": "/v1/reddit/search",
+    "data": {
+      "items": [
+        {
+          "post": {
+            "id": "abc123",
+            "url": "https://www.reddit.com/r/LongIsland/comments/abc123/tents_behind_the_plaza/",
+            "content": {"text": "Tents behind the plaza\n\nThere are tents and a tarp behind the plaza near the station for weeks now.", "media_urls": ["https://example.invalid/media/1.jpg"]},
+            "author": {"username": "synthetic_user_1", "display_name": "Synthetic Person", "avatar_url": "https://example.invalid/avatar.png", "verified": false},
+            "engagement": {"likes": 12, "comments": 3},
+            "flags": {"deleted": false},
+            "published_at": "2026-10-13T12:00:00Z",
+            "ext": {"subreddit": "LongIsland", "title": "Tents behind the plaza", "author_url": "https://www.reddit.com/user/synthetic_user_1", "content_language": "en"}
+          }
+        },
+        {
+          "id": "def456",
+          "url": "https://www.reddit.com/r/nyc/comments/def456/something/",
+          "content": {"text": "Out of area thread"},
+          "author": {"username": "synthetic_user_2"},
+          "flags": {"deleted": false},
+          "published_at": "2026-10-12T10:00:00Z",
+          "ext": {"subreddit": "nyc", "title": "Out of area thread"}
+        },
+        {
+          "id": "ghi789",
+          "url": "https://www.reddit.com/r/LongIsland/comments/ghi789/undated/",
+          "content": {"text": "A post without any timestamp"},
+          "author": {"username": "synthetic_user_3"},
+          "flags": {"deleted": false},
+          "ext": {"subreddit": "LongIsland", "title": "Undated"}
+        },
+        {
+          "id": "jkl012",
+          "url": "https://www.reddit.com/r/LongIsland/comments/jkl012/link_post/",
+          "content": {"text": "Person sleeping on the platform bench every night"},
+          "author": {"username": "synthetic_user_4"},
+          "flags": {"deleted": false},
+          "published_at": 1791892800,
+          "ext": {"subreddit": "LongIsland", "title": "Person sleeping on the platform bench every night"}
+        }
+      ]
+    },
+    "pagination": {"next_cursor": "t3_jkl012", "has_more": true},
+    "credits_used": 1,
+    "credits_remaining": 2480,
+    "request_id": "req-synthetic-1",
+    "cached": false
+  },
+  "reddit_comments_ok": {
+    "success": true,
+    "platform": "reddit",
+    "endpoint": "/v1/reddit/post/comments",
+    "data": {
+      "items": [
+        {
+          "id": "c1",
+          "post_id": "abc123",
+          "text": "I saw people sleeping behind the plaza this morning.",
+          "author": {"username": "synthetic_commenter_1", "display_name": "Synthetic Commenter"},
+          "flags": {"deleted": false},
+          "published_at": "2026-10-13T14:00:00Z",
+          "ext": {"post_title": "Tents behind the plaza", "post_url": "https://www.reddit.com/r/LongIsland/comments/abc123/tents_behind_the_plaza/", "subreddit": "LongIsland", "post_author": "synthetic_user_1"},
+          "replies": [
+            {
+              "id": "c2",
+              "parent_id": "c1",
+              "text": "Still there tonight near the station.",
+              "author": {"username": "synthetic_commenter_2"},
+              "flags": {"deleted": false},
+              "published_at": "2026-10-13T23:00:00Z",
+              "ext": {"subreddit": "LongIsland"},
+              "replies": []
+            }
+          ]
+        },
+        {
+          "id": "c3",
+          "text": null,
+          "author": {"username": null},
+          "flags": {"deleted": true},
+          "published_at": "2026-10-13T15:00:00Z"
+        }
+      ]
+    },
+    "credits_used": 5,
+    "credits_remaining": 2475,
+    "request_id": "req-synthetic-2"
+  },
+  "twitter_search_ok": {
+    "success": true,
+    "platform": "twitter",
+    "data": {
+      "items": [
+        {"post": {"id": "1845000000000000001", "url": null, "content": {"text": "Encampment by the train station in Hicksville again #longisland"}, "author": {"username": "synthetic_x_user"}, "flags": {"deleted": false}, "published_at": "2026-10-14T08:00:00Z"}},
+        {"post": {"id": "not-a-number", "url": "https://x.com/synthetic_x_user", "content": {"text": "profile only url"}, "author": {"username": "synthetic_x_user"}, "flags": {"deleted": false}, "published_at": "2026-10-14T08:00:00Z"}}
+      ]
+    },
+    "credits_used": 1,
+    "credits_remaining": 2479
+  }
+}
