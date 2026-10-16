@@ -112,7 +112,7 @@ Every narrative sentence, table and figure in the plan, in page order, with a ve
 | G3-Y1-01 | ❌ | Agency name; the cited regulations don't set a percentage (18 NYCRR 491.11, 900.18) [S13][S14] |
 | G3-Y25-01 | ❓ | "80% of income" uncited; even 50% exceeds the 30%-of-income rent share used in local housing programs [S15][S40] |
 | G4-Y1-01 | ⚠️ | "Expungement" → sealing (Clean Slate; CPL 160.59); MRTA expungement only for certain marijuana convictions [S17][S18] |
-| G1-Y1-01a | ❓ | "Long Island Housing Coalition" not found |
+| G1-Y1-01a | ✅ | "Long Island Housing Coalition" verified on re-check (Oct 16, 2026): a coalition of Long Island nonprofits chaired by ERASE Racism [S43]. The Oct 14 version marked it "not found"; that finding is withdrawn |
 | G6-Y25-06 | ⚠️ | RRH wording inverted |
 | G2-Y25-02a | ⚠️ | Zoning Atlas attribution [S33] |
 | G4-Y25-05 | ⚠️ | *Commons West* appeal affects source-of-income enforcement for voucher holders [S36] |

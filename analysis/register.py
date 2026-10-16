@@ -41,7 +41,7 @@ ROWS = [
     ("G1-Y1-01a", 1, "Y1", "sub", 5,
      "A potential resource can be found in current housing advocate groups like the Long Island Housing Coalition.",
      "partners", "CoC", "N", "directional", "",
-     "No organization by this exact name could be verified; draft named ERASE Racism"),
+     "Verified Oct 16, 2026: a coalition of Long Island nonprofits chaired by ERASE Racism, the group the draft named; separate from LICH. Name a contact"),
     ("G1-Y1-02", 1, "Y1", "step", 5,
      "Create a system map of the location and extent of supportive services on Long Island, including mental health care, substance use treatment, employment assistance, financial management, transportation, and food assistance.",
      "system-map", "CoC", "N", "deliverable", "G5-Y1-01",

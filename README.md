@@ -1,6 +1,6 @@
 # NY-603 Strategic Plan 2026–2030: Partner Review
 
-An independent, line-by-line review of the *Long Island Continuum of Care: Strategic Plan for 2026–2030* (NY-603, Nassau and Suffolk Counties). It covers fact-checking against primary sources, data and logic checks, a feasibility read of all 68 action steps, and an environment scan current to **October 14, 2026**.
+An independent, line-by-line review of the *Long Island Continuum of Care: Strategic Plan for 2026–2030* (NY-603, Nassau and Suffolk Counties). It covers fact-checking against primary sources, data and logic checks, a feasibility read of all 68 action steps, and an environment scan current to **October 14, 2026** (revised October 16, 2026; see the note at the top of REVIEW.md).
 
 **Start here → [REVIEW.md](REVIEW.md)**. Section 0 is a one-page summary with ten ranked recommendations.
 
@@ -17,7 +17,7 @@ An independent, line-by-line review of the *Long Island Continuum of Care: Strat
 | [`analysis/checks.py`](analysis/checks.py) → [`checks-output.txt`](analysis/checks-output.txt) | Recomputes every number in the review |
 | [`analysis/register.py`](analysis/register.py) | Source of truth for the register; regenerates Appendix C |
 | [`analysis/draft_vs_final.py`](analysis/draft_vs_final.py) | Sentence-level draft/final comparison |
-| [`pit-radar/`](pit-radar/README.md) | **Separate project:** build specification for PIT Radar, an internal, place-level outreach tool for LICH that maps recent public posts about unsheltered homelessness in Nassau and Suffolk. Specification only; nothing is built or run yet |
+| [`pit-radar/`](pit-radar/README.md) | **Separate project:** PIT Radar, an internal, place-level outreach tool for LICH that maps recent public posts about unsheltered homelessness in Nassau and Suffolk. Built (v1.0) and deployable on Railway; see [`pit-radar/docs/13-railway-launch.md`](pit-radar/docs/13-railway-launch.md) |
 
 ## Reproduce
 

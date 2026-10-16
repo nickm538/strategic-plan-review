@@ -11,7 +11,7 @@ Columns: **Ctl** = who must act (CoC / partner / policy); **$** = needs new mone
 | G1-Y1-H | CoC | N | deliverable | 10 | — | Overlaps the annual gaps analysis a CoC must already do (24 CFR 578.7(c)(3)); general housing-need study sits under a goal about unsheltered homelessness |
 | G1-Y1-E | CoC | N | deliverable | 12 | G2-Y1-E, G2-Y1-Ea, G1-Y25-05, G4-Y1-E, G6-Y1-E | One of five separate campaigns/trainings; no audience-level reach target |
 | G1-Y1-01 | partner | Y | directional | 5 | G3-Y25-08, G3-Y1-H, G5-Y25-02 | 'people without documentation' is ambiguous (ID documents vs immigration status); written standards are already required (24 CFR 578.7(a)(9)), so 'create' should read 'update' |
-| G1-Y1-01a | CoC | N | directional | 5 | — | No organization by this exact name could be verified; draft named ERASE Racism |
+| G1-Y1-01a | CoC | N | directional | 5 | — | Verified Oct 16, 2026: a coalition of Long Island nonprofits chaired by ERASE Racism, the group the draft named; separate from LICH. Name a contact |
 | G1-Y1-02 | CoC | N | deliverable | 3 | G5-Y1-01 | Second system map in G5-Y1-01; build once |
 | G1-Y1-02a | CoC | N | deliverable | 3 | G1-Y1-01 | — |
 | G1-Y25-01 | partner | Y | directional | 7 | G6-Y25-02, G6-Y1-02 | — |

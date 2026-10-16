@@ -173,6 +173,31 @@ print(f"  Income needed for FY2027 2BR FMR ${two_br:,} at 30%: ${need_income:,.0
 print(f"  Minimum-wage hours/week needed: {two_br / (0.30 * MIN_WAGE_LI_2026 * 52 / 12):.0f}")
 
 # ---------------------------------------------------------------------------
+# 4b. FY2024 HUD CoC awards to NY-603 and the FY2026 60% Tier 1 line (REVIEW 9.1)
+# ---------------------------------------------------------------------------
+header("4b. NY-603 FY2024 CoC awards (HUD award report) and a 60% Tier 1 illustration")
+AWARDS_FY2024 = {  # hud.gov CoC-2024-NY_Press.pdf, NY-603 section, retrieved 2026-10-16
+    "AHAL II FY2024": 126942, "Beacon House III": 245024, "EOC 2024 PSH Renewal": 245044,
+    "EOC RRH Program": 1029644, "EOC RRH Program II": 369870, "Estella (New)": 361100,
+    "FSL RRH Program FY2024": 1062485, "FY 2024 Casa Salva FN": 448444, "FY 2024 Casa Serenidad FN": 438463,
+    "HFY TH-RRH Renewal FY2024": 429836, "HUD Senior Quarters Renewal 2024": 112996, "HUD-Coram 2024": 65021,
+    "HUD-Nassau 2024": 457081, "LI COC Planning Project 2024": 1173818, "LI Consolidated RRH FY24 (NY1174)": 1581009,
+    "LI Coordinated Entry Expansion 2024": 430100, "LI Coordinated Entry Renewal 2024": 835812,
+    "LI HMIS 2024": 489513, "Long Island Coordinated Entry System for Domestic Violence Survivors": 248975,
+    "Nassau Scattered Site Permanent Housing Program": 163714, "OPP": 370792, "OPPII": 993377,
+    "Options NCC 2024": 516596, "Project Homestart": 521161, "Project Independence Renewal 2024": 1540885,
+    "Project Veterans' Independence Renewal 2024": 378176, "RRH 2024": 636766,
+    "SAIL Shelter Plus Care III 2024": 506817, "SHP/Islip": 199899, "Summit Renewal FY 2024": 84260,
+    "Supportive Housing Subsidy Program": 357915, "W&H Renewal YE 8.31.26": 677810,
+    "WellLife Network Medford Gardens": 554000,
+}
+total_aw = sum(AWARDS_FY2024.values())
+print(f"  {len(AWARDS_FY2024)} grants, total ${total_aw:,} (HUD report total: $17,653,345; match: {total_aw == 17653345})")
+renew_proxy = total_aw - AWARDS_FY2024["LI COC Planning Project 2024"] - AWARDS_FY2024["Estella (New)"]
+print(f"  Excluding the planning grant and the one grant marked new: ${renew_proxy:,} (proxy for renewal demand)")
+print(f"  At a 60% Tier 1: ${renew_proxy * 0.6:,.0f} inside Tier 1, ${renew_proxy * 0.4:,.0f} outside (illustration only)")
+
+# ---------------------------------------------------------------------------
 # 5. Cost burden (plan p. 8: '55% of Long Islanders are cost-burdened')
 # ---------------------------------------------------------------------------
 header("5. Housing cost burden, ACS 2024 1-year (B25070 renters, B25091 owners)")

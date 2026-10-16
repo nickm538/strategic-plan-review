@@ -103,4 +103,13 @@ All accessed October 14, 2026 unless noted. **Primary** = the agency, court or s
 
 <a id="s41"></a>**S41** (Secondary) Pax Christi Hospitality Center listing (255 Oakland Ave, Port Jefferson; 25-bed men's emergency shelter), https://www.longisland.com/business/pax-christie-hospitality-center.html; *Long Island Press*, Nov 4, 2024, https://longislandpress.com/2024/11/04/homeless-population-li
 
-**S43** (Search, no match) "Long Island Housing Coalition": web searches on Oct 14, 2026 returned no organization by this name.
+<a id="s43"></a>**S43** (Secondary; accessed Oct 16, 2026) *Newsday*, "Long Island Housing Coalition kicks off discussion series in Glen Cove," Oct 30, 2024. https://www.newsday.com/business/glen-cove-housing-vqhpseso — "a group of area nonprofits"; ERASE Racism "chairs the coalition." Also listed as a member of RPA's New York Neighbors coalition, https://rpa.org/new-york-neighbors. *(The Oct 14 version of this entry recorded a failed search; that result was wrong.)*
+
+**S43a** (Primary; accessed Oct 16, 2026) Similarly named, separate organizations: Long Island Housing Services, Bohemia, "the island's only private fair housing advocacy and enforcement agency serving Nassau and Suffolk counties," https://www.lifairhousing.org/about/history/; Long Island Housing Partnership, affordable housing and HUD-certified homebuyer counseling, https://www.lihp.org/
+
+## NY-603 governance and funding
+<a id="s44"></a>**S44** (Primary; accessed Oct 16, 2026) *Nassau, Suffolk Counties Continuum of Care (NY-603) Governance Charter*, updated 5/23/25, published on the CoC website. https://www.lihomeless.org/what-is-a-coc — Sections VI (19-seat Governance Board), VII (seven standing committees), IX.B (LICH designated Collaborative Applicant) and X.B (LICH designated HMIS Lead). LICH's description of the same roles: https://www.addressthehomeless.org/continuum-of-care-coc
+
+<a id="s45"></a>**S45** (Primary; accessed Oct 16, 2026) HUD, *Fiscal Year 2024 Continuum of Care Competition Homeless Assistance Award Report*, New York. https://www.hud.gov/sites/dfiles/CPD/documents/CoC/CoC-2024-NY_Press.pdf — NY-603 total $17,653,345 across 33 grants, including LI CoC Planning Project 2024 ($1,173,818), LI Coordinated Entry Renewal ($835,812) and Expansion ($430,100), LI HMIS 2024 ($489,513), and LI Coordinated Entry System for DV Survivors ($248,975). Recomputed in `analysis/checks.py`.
+
+<a id="s46"></a>**S46** (Primary; accessed Oct 16, 2026) LICH, "Meeting People Where They Are: How LICH and Northwell Bring Health Care to Long Island's Homeless" (Street Medicine Program with Northwell Health). https://www.addressthehomeless.org/post/meeting-people-where-they-are-how-lich-and-northwell-bring-health-care-to-long-island-s-homeless-co

@@ -28,7 +28,7 @@
 ### Removed or replaced in the final
 | Where | Draft | Final |
 |---|---|---|
-| G1-Y1-01a | "...housing advocate groups like **Erase Racism**" | "...like the **Long Island Housing Coalition**" (name could not be verified) |
+| G1-Y1-01a | "...housing advocate groups like **Erase Racism**" | "...like the **Long Island Housing Coalition**", a coalition of Long Island nonprofits that ERASE Racism chairs [S43]. The final widened the reference from the chair to the coalition. |
 | G1 Years 2–5 | "A promising practice includes programs like **Pax Christi**, which divert shelter fees into savings accounts for tenants." | "**Pilot** a program that diverts shelter fees into savings accounts for tenants." |
 | G3-Y25-01b | "**Replicate the Pax Christi Savings program** for tenants" | "Pilot a program to divert shelter fees into a savings account." |
 | G6-Y1-E | "Partner with the **American Bar Association** to launch a tenant rights training" | "Launch a tenant rights training" |

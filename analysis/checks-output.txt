@@ -84,6 +84,13 @@
   Minimum-wage hours/week needed: 122
 
 ==============================================================================
+4b. NY-603 FY2024 CoC awards (HUD award report) and a 60% Tier 1 illustration
+==============================================================================
+  33 grants, total $17,653,345 (HUD report total: $17,653,345; match: True)
+  Excluding the planning grant and the one grant marked new: $16,118,427 (proxy for renewal demand)
+  At a 60% Tier 1: $9,671,056 inside Tier 1, $6,447,371 outside (illustration only)
+
+==============================================================================
 5. Housing cost burden, ACS 2024 1-year (B25070 renters, B25091 owners)
 ==============================================================================
   Nassau   renters burdened 42,188/80,294 = 52.5% (severe 50%+: 25.1%); owners 32.9%; all households 36.4%
